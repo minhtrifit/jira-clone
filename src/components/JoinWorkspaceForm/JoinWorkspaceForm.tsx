@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { SquareArrowOutUpRight } from "lucide-react";
 import { toast } from "react-toastify";
 import {
   Dialog,
@@ -12,42 +12,41 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import WorkspaceBtn from "../WorkspaceBtn/WorkspaceBtn";
 import { useAuth } from "../providers/AuthProvider";
 import ButtonCpn from "../ButtonCpn/ButtonCpn";
 import { JOIN_WORKSPACE_TYPE, WORKSPACE_TYPE } from "@/types";
 import useWorkspaceStore from "@/store/workspace";
 
-const CreateWorkspaceForm = () => {
+const JoinWorkspaceForm = () => {
   const { user }: any = useAuth();
-  const { createWorkspace, createJoinWorkspace, getWorkspaces, loading }: any =
-    useWorkspaceStore();
+  const {
+    createJoinWorkspace,
+    getWorkspaces,
+    getWorkspaceByJoinUrl,
+    loading,
+  }: any = useWorkspaceStore();
 
   const [open, setOpen] = useState<boolean>(false);
-  const [workspaceForm, setWorkspaceForm] = useState<WORKSPACE_TYPE>({
-    name: "",
+  const [joinWorkspaceForm, setJoinWorkspaceForm] = useState<WORKSPACE_TYPE>({
+    joinUrl: "",
   });
 
-  const handleCreateNewWorkSpace = async (e: FormEvent<HTMLFormElement>) => {
+  const handleJoinWorkspace = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       if (user?.uid) {
-        const joinUrl = `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/workspace/join/${uuidv4()}`;
+        const workspace: WORKSPACE_TYPE = await getWorkspaceByJoinUrl(
+          joinWorkspaceForm?.joinUrl
+        );
 
-        const newWorkspace: WORKSPACE_TYPE = {
-          ownerId: user?.uid,
-          name: workspaceForm.name,
-          joinUrl: joinUrl,
-        };
-
-        const createResult = await createWorkspace(newWorkspace);
-        console.log("Create new workspace:", createResult);
+        if (!workspace) {
+          toast.error("Workspace not found");
+          return;
+        }
 
         const newJoinWorkspace: JOIN_WORKSPACE_TYPE = {
-          workspaceId: createResult?.id,
+          workspaceId: workspace?.id,
           userId: user?.uid,
         };
 
@@ -56,12 +55,12 @@ const CreateWorkspaceForm = () => {
 
         await getWorkspaces(user?.uid);
 
-        toast.success("Create workspace successfully");
+        toast.success("Join workspace successfully");
       }
     } catch (error) {
-      toast.error("Create workspace failed");
+      toast.error("Join workspace failed");
     } finally {
-      setWorkspaceForm({ name: "" });
+      setJoinWorkspaceForm({ joinUrl: "" });
       setOpen(false);
     }
   };
@@ -69,37 +68,44 @@ const CreateWorkspaceForm = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <WorkspaceBtn isCreated={true} onClick={() => {}} />
+        <ButtonCpn
+          type="button"
+          title="Join workspace"
+          icon={<SquareArrowOutUpRight size={20} />}
+        />
       </DialogTrigger>
       <DialogContent>
         <form
           onSubmit={(e) => {
-            handleCreateNewWorkSpace(e);
+            handleJoinWorkspace(e);
           }}
         >
           <DialogHeader>
-            <DialogTitle>Create a workspace</DialogTitle>
+            <DialogTitle>Join a workspace</DialogTitle>
             <DialogDescription>
-              Store entire your work process.
+              Work with other to upgrade work quality.
             </DialogDescription>
           </DialogHeader>
           <div className="my-6 flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="joinUrl">Join URL</Label>
               <Input
-                id="name"
+                id="joinUrl"
                 type="text"
                 required
-                placeholder="eg: chill-workspace"
-                value={workspaceForm.name}
+                placeholder="fill join url from owner workspace"
+                value={joinWorkspaceForm.joinUrl}
                 onChange={(e) => {
-                  setWorkspaceForm({ ...workspaceForm, name: e.target.value });
+                  setJoinWorkspaceForm({
+                    ...joinWorkspaceForm,
+                    joinUrl: e.target.value,
+                  });
                 }}
               />
             </div>
           </div>
           <DialogFooter>
-            <ButtonCpn type="submit" title="Create" loading={loading} />
+            <ButtonCpn type="submit" title="Join" loading={loading} />
           </DialogFooter>
         </form>
       </DialogContent>
@@ -107,4 +113,4 @@ const CreateWorkspaceForm = () => {
   );
 };
 
-export default CreateWorkspaceForm;
+export default JoinWorkspaceForm;

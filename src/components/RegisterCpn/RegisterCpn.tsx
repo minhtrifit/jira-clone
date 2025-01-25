@@ -25,10 +25,12 @@ const RegisterCpn = ({
 
   const [registerForm, setRegisterForm] = useState<{
     email: string;
+    displayName: string;
     password: string;
     confirmPassword: string;
   }>({
     email: "",
+    displayName: "",
     password: "",
     confirmPassword: "",
   });
@@ -46,11 +48,20 @@ const RegisterCpn = ({
       if (registerForm.email && registerForm.password) {
         setLoading(true);
 
-        await signUp(registerForm.email, registerForm.password);
+        await signUp(
+          registerForm.displayName,
+          registerForm.email,
+          registerForm.password
+        );
         router.push("/");
         toast.success("Register successfully!");
 
-        setRegisterForm({ email: "", password: "", confirmPassword: "" });
+        setRegisterForm({
+          email: "",
+          displayName: "",
+          password: "",
+          confirmPassword: "",
+        });
         setLoading(false);
       }
     } catch (error) {
@@ -79,6 +90,21 @@ const RegisterCpn = ({
             }}
           >
             <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="displayName">Name</Label>
+                <Input
+                  id="displayName"
+                  type="text"
+                  required
+                  value={registerForm.displayName}
+                  onChange={(e) => {
+                    setRegisterForm({
+                      ...registerForm,
+                      displayName: e.target.value,
+                    });
+                  }}
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input

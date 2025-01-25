@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { Search, SquareArrowOutUpRight } from "lucide-react";
 import ButtonCpn from "@/components/ButtonCpn/ButtonCpn";
 import WorkspaceBtn from "@/components/WorkspaceBtn/WorkspaceBtn";
 import CreateWorkspaceForm from "@/components/CreateWorkspaceForm/CreateWorkspaceForm";
@@ -9,19 +11,18 @@ import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
 import { Input } from "@/components/ui/input";
 import useWorkspaceStore from "@/store/workspace";
 import { WORKSPACE_TYPE } from "@/types";
-import { Search, SquareArrowOutUpRight } from "lucide-react";
-import { useEffect } from "react";
+import JoinWorkspaceForm from "@/components/JoinWorkspaceForm/JoinWorkspaceForm";
 
 const WorkspacePage = () => {
   const { user }: any = useAuth();
-  const { workspaces, loading, getWorkspace }: any = useWorkspaceStore();
+  const { workspaces, loading, getWorkspaces }: any = useWorkspaceStore();
 
   const handleAccessWorkSpace = () => {
     console.log("Access workspace");
   };
 
   useEffect(() => {
-    if (user?.uid) getWorkspace(user?.uid);
+    if (user?.uid) getWorkspaces(user?.uid);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.uid]);
 
@@ -48,11 +49,7 @@ const WorkspacePage = () => {
             />
           </div>
 
-          <ButtonCpn
-            type="button"
-            title="Join workspace"
-            icon={<SquareArrowOutUpRight size={20} />}
-          />
+          <JoinWorkspaceForm />
         </div>
       </nav>
 
@@ -67,8 +64,6 @@ const WorkspacePage = () => {
           <CreateWorkspaceForm />
 
           {workspaces?.map((workspace: WORKSPACE_TYPE) => {
-            console.log(workspace);
-
             return (
               <WorkspaceBtn
                 key={workspace?.id}

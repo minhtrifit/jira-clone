@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dayjs from "dayjs";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
-import { JOIN_WORKSPACE_TYPE, WORKSPACE_TYPE } from "@/types";
+import { JOIN_WORKSPACE_TYPE } from "@/types";
 import { COLLECTION_NAME } from "@/lib/utils";
 
 const formattedDate = dayjs().format("DD/MM/YYYY HH:mm:ss");

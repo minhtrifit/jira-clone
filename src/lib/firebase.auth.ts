@@ -4,14 +4,35 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 
 export const signIn = (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const signUp = (email: string, password: string) => {
-  return createUserWithEmailAndPassword(auth, email, password);
+export const signUp = async (
+  displayName: string,
+  email: string,
+  password: string
+) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    await updateProfile(user, {
+      displayName: displayName,
+    });
+
+    return user;
+  } catch (error) {
+    console.error("Create account failed!:", error);
+    return null;
+  }
 };
 
 export const logOut = () => {

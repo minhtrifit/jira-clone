@@ -4,7 +4,7 @@ export interface WORKSPACE_TYPE {
   name?: string;
   joinUrl?: string;
   avatarUrl?: string;
-  joinUsers?: JOIN_WORKSPACE_TYPE[];
+  joinUsers?: JOIN_WORKSPACE_TYPE[] | USER_TYPE[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -15,4 +15,12 @@ export interface JOIN_WORKSPACE_TYPE {
   userId?: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface USER_TYPE {
+  id?: string;
+  displayName?: string;
+  email?: string;
+  phoneNumber?: string | number;
+  photoURL?: string;
 }
