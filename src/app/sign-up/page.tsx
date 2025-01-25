@@ -1,5 +1,5 @@
-import LoginCpn from "@/components/LoginCpn/LoginCpn";
 import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
+import RegisterCpn from "@/components/RegisterCpn/RegisterCpn";
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
         <ModeToggle />
       </nav>
       <div className="w-full max-w-sm">
-        <LoginCpn />
+        <RegisterCpn />
       </div>
     </div>
   );
