@@ -117,3 +117,30 @@
 .Toastify__toast-container {
   font-size: 0.82rem;
 }
+
+::-webkit-scrollbar {
+  width: 8px; /* Set width for vertical scrollbar */
+  height: 8px; /* Set height for horizontal scrollbar */
+}
+
+/* Style the track (the background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Style the thumb (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Hover effect for the thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Style the corner when both scrollbars are visible */
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
