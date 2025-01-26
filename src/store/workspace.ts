@@ -1,14 +1,17 @@
 import { JOIN_WORKSPACE_TYPE, USER_TYPE, WORKSPACE_TYPE } from "@/types";
 import { create } from "zustand";
 
-interface WorkspaceStoreState {
+export interface WorkspaceStoreState {
   workspaces: WORKSPACE_TYPE[];
   loading: boolean;
   error: unknown;
-  getWorkspaces: (userId: string) => Promise<void>;
-  createWorkspace: (workspace: WORKSPACE_TYPE) => Promise<void>;
-  createJoinWorkspace: (joinWorkspace: JOIN_WORKSPACE_TYPE) => Promise<void>;
-  getWorkspaceByJoinUrl: (joinUrl: string) => Promise<void>;
+  getWorkspaces: (userId: string) => Promise<WORKSPACE_TYPE[]>;
+  createWorkspace: (workspace: WORKSPACE_TYPE) => Promise<WORKSPACE_TYPE>;
+  createJoinWorkspace: (
+    joinWorkspace: JOIN_WORKSPACE_TYPE
+  ) => Promise<JOIN_WORKSPACE_TYPE>;
+  getWorkspaceByJoinUrl: (joinUrl: string) => Promise<WORKSPACE_TYPE>;
+  getWorkspaceByWorkspaceId: (joinUrl: string) => Promise<WORKSPACE_TYPE>;
 }
 
 const useWorkspaceStore = create<WorkspaceStoreState>((set) => ({
@@ -44,6 +47,8 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set) => ({
       );
 
       set({ workspaces: data, loading: false });
+
+      return data;
     } catch (error) {
       set({ error: error, loading: false });
     }
@@ -109,6 +114,22 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set) => ({
       if (!response.ok) throw new Error("Get workspace by join URL failed!");
 
       const data = await response.json();
+
+      set({ loading: false });
+
+      return data;
+    } catch (error) {
+      set({ error: error, loading: false });
+    }
+  },
+
+  getWorkspaceByWorkspaceId: async (workspaceId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch(`/api/workspace/workspace-id/${workspaceId}`);
+      if (!res.ok) throw new Error("Get workspace by workspace ID failed!");
+
+      const data = await res.json();
 
       set({ loading: false });
 

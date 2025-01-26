@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { WORKSPACE_TYPE } from "@/types";
 import { COLLECTION_NAME } from "@/lib/utils";
 
+// Get workspace from WORKSPACE_LIST by joinUrl
 export async function POST(req: Request) {
   try {
     const body = await req.json();

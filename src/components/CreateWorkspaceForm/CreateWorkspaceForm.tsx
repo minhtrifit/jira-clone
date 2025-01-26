@@ -16,12 +16,16 @@ import WorkspaceBtn from "../WorkspaceBtn/WorkspaceBtn";
 import { useAuth } from "../providers/AuthProvider";
 import ButtonCpn from "../ButtonCpn/ButtonCpn";
 import { JOIN_WORKSPACE_TYPE, WORKSPACE_TYPE } from "@/types";
-import useWorkspaceStore from "@/store/workspace";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 
 const CreateWorkspaceForm = () => {
   const { user }: any = useAuth();
-  const { createWorkspace, createJoinWorkspace, getWorkspaces, loading }: any =
-    useWorkspaceStore();
+  const {
+    createWorkspace,
+    createJoinWorkspace,
+    getWorkspaces,
+    loading,
+  }: WorkspaceStoreState = useWorkspaceStore();
 
   const [open, setOpen] = useState<boolean>(false);
   const [workspaceForm, setWorkspaceForm] = useState<WORKSPACE_TYPE>({

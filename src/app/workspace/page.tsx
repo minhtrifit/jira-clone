@@ -1,22 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, SquareArrowOutUpRight } from "lucide-react";
-import ButtonCpn from "@/components/ButtonCpn/ButtonCpn";
+import { Search } from "lucide-react";
 import WorkspaceBtn from "@/components/WorkspaceBtn/WorkspaceBtn";
 import CreateWorkspaceForm from "@/components/CreateWorkspaceForm/CreateWorkspaceForm";
 import Divider from "@/components/Divider/Divider";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
 import { Input } from "@/components/ui/input";
-import useWorkspaceStore from "@/store/workspace";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import { WORKSPACE_TYPE } from "@/types";
 import JoinWorkspaceForm from "@/components/JoinWorkspaceForm/JoinWorkspaceForm";
 import { useDebounce } from "@/hooks/useDebounce";
 
 const WorkspacePage = () => {
   const { user }: any = useAuth();
-  const { workspaces, loading, getWorkspaces }: any = useWorkspaceStore();
+  const { workspaces, loading, getWorkspaces }: WorkspaceStoreState =
+    useWorkspaceStore();
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 500);
 
