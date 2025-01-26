@@ -41,7 +41,7 @@ export function NavMain(props: PropType) {
                   asChild
                   className={`${
                     pathname === item?.url &&
-                    "text-white bg-primary hover:bg-primary/90"
+                    "text-white bg-primary hover:text-white hover:bg-primary/90"
                   }`}
                 >
                   <Link href={`${item?.url ?? "#"}`}>

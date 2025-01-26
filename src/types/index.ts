@@ -53,6 +53,7 @@ export interface TASK_TYPE {
   name?: string;
   description?: string;
   projectId?: string;
+  project?: PROJECT_TYPE;
   status?: string;
   dueAt?: string | Timestamp;
   createdAt?: string | Timestamp;
