@@ -1,3 +1,4 @@
+import { type LucideIcon } from "lucide-react";
 import { Timestamp } from "firebase/firestore";
 
 export interface WORKSPACE_TYPE {
@@ -25,4 +26,15 @@ export interface USER_TYPE {
   email?: string;
   phoneNumber?: string | number;
   photoURL?: string;
+}
+
+export interface SLIDEBAR_ITEM_TYPE {
+  title: string;
+  url: string;
+  icon?: LucideIcon | string;
+  isActive?: boolean;
+  items?: {
+    title: string;
+    url: string;
+  }[];
 }

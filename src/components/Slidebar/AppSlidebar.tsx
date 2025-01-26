@@ -1,19 +1,13 @@
 "use client";
 
-import * as React from "react";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
   Frame,
-  GalleryVerticalEnd,
   Map,
   PieChart,
-  Settings2,
-  SquareTerminal,
+  Settings,
+  House,
+  CircleCheckBig,
 } from "lucide-react";
-
 import { NavMain } from "@/components/Slidebar/NavMain";
 import { NavProjects } from "@/components/Slidebar/NavProjects";
 import { NavUser } from "@/components/Slidebar/NavUser";
@@ -26,126 +20,72 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuth } from "../providers/AuthProvider";
+import { SLIDEBAR_ITEM_TYPE } from "@/types";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 
-const data = {
-  navMain: [
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user }: any = useAuth();
+
+  const { workspace }: WorkspaceStoreState = useWorkspaceStore();
+
+  const MAIN_ITEMS: SLIDEBAR_ITEM_TYPE[] = [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
+      title: "Home",
+      url: `/workspace/${workspace?.id ?? "#"}`,
+      icon: House,
+      items: [],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      title: "My Tasks",
+      url: `/workspace/${workspace?.id ?? "#"}/my-tasks`,
+      icon: CircleCheckBig,
+      items: [],
     },
     {
       title: "Settings",
       url: "#",
-      icon: Settings2,
+      icon: Settings,
       items: [
         {
           title: "General",
           url: "#",
         },
         {
-          title: "Team",
+          title: "Workspace",
           url: "#",
         },
         {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Project",
           url: "#",
         },
       ],
     },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-};
+  ];
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user }: any = useAuth();
+  const PROJECT_ITEMS: SLIDEBAR_ITEM_TYPE[] = [
+    {
+      title: "Design Engineering",
+      url: `/workspace/${workspace?.id ?? "#"}/project/abc-123`,
+      icon: "",
+    },
+    {
+      title: "Fullstack Developing",
+      url: `/workspace/${workspace?.id ?? "#"}/project/abc-123`,
+      icon: "",
+    },
+  ];
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <WorkspaceSwitcher />
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={MAIN_ITEMS} />
+        <NavProjects items={PROJECT_ITEMS} />
       </SidebarContent>
+
       <SidebarFooter>
         <NavUser user={user} />
       </SidebarFooter>

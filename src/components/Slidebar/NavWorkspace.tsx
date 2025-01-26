@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronsUpDown, Plus } from "lucide-react";
+import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,9 +34,11 @@ export function WorkspaceSwitcher() {
     getWorkspaceByWorkspaceId,
   }: WorkspaceStoreState = useWorkspaceStore();
 
-  const { isMobile } = useSidebar();
+  const { state, isMobile } = useSidebar();
   const router = useRouter();
   const params = useParams();
+
+  console.log(state);
 
   const [workspaceList, setWorkspaceList] =
     useState<WORKSPACE_TYPE[]>(workspaces);
@@ -70,7 +73,14 @@ export function WorkspaceSwitcher() {
 
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
+      {state === "expanded" && (
+        <SidebarMenuItem className="px-2 pt-1 flex items-center">
+          <Image src="/logo.png" width={100} height={100} alt="app-logo" />
+          <h1 className="text-xl font-bold text-primary">Jira Clone</h1>
+        </SidebarMenuItem>
+      )}
+
+      <SidebarMenuItem className="my-3 py-2 border-gray-400 dark:border-gray-600 border-y border-dashed">
         <SidebarGroupLabel>
           <div className="w-full flex items-center justify-between">
             <span>Workspace</span>

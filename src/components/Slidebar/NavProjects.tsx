@@ -24,30 +24,41 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { SLIDEBAR_ITEM_TYPE } from "@/types";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getFirstLetterUppercase } from "@/lib/utils";
+import Link from "next/link";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 
-export function NavProjects({
-  projects,
-}: {
-  projects: {
-    name: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
-}) {
+interface PropType {
+  items: SLIDEBAR_ITEM_TYPE[];
+}
+
+export function NavProjects(props: PropType) {
+  const { items } = props;
+
+  const { workspace }: WorkspaceStoreState = useWorkspaceStore();
+
   const { isMobile } = useSidebar();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
+        {items?.map((item) => (
+          <SidebarMenuItem key={item.title} className="my-1">
             <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
+              <Link href={item.url}>
+                <Avatar className="h-6 w-6 rounded-md">
+                  <AvatarImage src={item?.icon as string} alt={item?.title} />
+                  <AvatarFallback className="rounded-md bg-primary text-white text-[0.7rem]">
+                    {item?.title ? getFirstLetterUppercase(item?.title) : "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <span>{item.title}</span>
+              </Link>
             </SidebarMenuButton>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
@@ -55,6 +66,7 @@ export function NavProjects({
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 className="w-48 rounded-lg"
                 side={isMobile ? "bottom" : "right"}
@@ -77,12 +89,15 @@ export function NavProjects({
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+
+        <Link href={`/workspace/${workspace?.id}/project`}>
+          <SidebarMenuItem>
+            <SidebarMenuButton className="text-sidebar-foreground/70">
+              <MoreHorizontal className="text-sidebar-foreground/70" />
+              <span>More</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </Link>
       </SidebarMenu>
     </SidebarGroup>
   );
