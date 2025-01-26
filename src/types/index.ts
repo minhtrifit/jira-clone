@@ -38,3 +38,23 @@ export interface SLIDEBAR_ITEM_TYPE {
     url: string;
   }[];
 }
+
+export interface PROJECT_TYPE {
+  id?: string;
+  name?: string;
+  workspaceId?: string;
+  avatarUrl?: string;
+  createdAt?: string | Timestamp;
+  updatedAt?: string | Timestamp;
+}
+
+export interface TASK_TYPE {
+  id?: string;
+  name?: string;
+  description?: string;
+  projectId?: string;
+  status?: string;
+  dueAt?: string | Timestamp;
+  createdAt?: string | Timestamp;
+  updatedAt?: string | Timestamp;
+}
