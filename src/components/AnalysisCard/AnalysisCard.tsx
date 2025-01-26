@@ -16,10 +16,10 @@ const AnalysisCard = (props: PropType) => {
   const { item } = props;
 
   return (
-    <Card className="w-full basis:auto lg:basis-full rounded-sm p-2">
+    <Card className="w-full basis:auto lg:basis-full rounded-sm bg-zinc-50 dark:bg-slate-900">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span className="font-semibold text-gray-400 dark:text-gray-500">
+          <span className="font-semibold text-gray-400 dark:text-gray-300">
             {item?.title}
           </span>
           <div
@@ -37,7 +37,7 @@ const AnalysisCard = (props: PropType) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <h1 className="text-xl font-bold">{item?.count}</h1>
+        <h1 className="text-xl font-bold dark:text-primary">{item?.count}</h1>
       </CardContent>
     </Card>
   );

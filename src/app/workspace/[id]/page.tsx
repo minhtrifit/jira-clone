@@ -7,6 +7,8 @@ import AnalysisCard, {
 import PageTitle from "@/components/PageTitle/PageTitle";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
+import AssignedTask from "@/components/AssignedTask/AssignedTask";
+import ProjectCpn from "@/components/ProjectsCpn/ProjectCpn";
 
 const WorkspacePage = () => {
   const { workspace, loading }: WorkspaceStoreState = useWorkspaceStore();
@@ -47,24 +49,46 @@ const WorkspacePage = () => {
   ];
 
   return (
-    <>
-      {loading ? (
-        <SkeletonCard />
-      ) : (
-        <div>
-          <PageTitle
-            title="Home"
-            description="Monitor all of your projects and tasks here"
-          />
+    // <>
+    //   {loading ? (
+    //     <SkeletonCard />
+    //   ) : (
+    //     <div>
+    //       <PageTitle
+    //         title="Home"
+    //         description="Monitor all of your projects and tasks here"
+    //       />
 
-          <div className="my-10 flex gap-3 flex-wrap lg:flex-nowrap">
-            {ANALYSIS_ITEMS?.map((item: ANALYSIS_TYPE) => {
-              return <AnalysisCard key={uuidv4()} item={item} />;
-            })}
-          </div>
-        </div>
-      )}
-    </>
+    //       <div className="my-10 w-full flex gap-3 flex-wrap lg:flex-nowrap">
+    //         {ANALYSIS_ITEMS?.map((item: ANALYSIS_TYPE) => {
+    //           return <AnalysisCard key={uuidv4()} item={item} />;
+    //         })}
+    //       </div>
+
+    //       <div className="w-full flex items-start gap-3 flex-wrap lg:flex-nowrap">
+    //         <AssignedTask />
+    //         <ProjectCpn />
+    //       </div>
+    //     </div>
+    //   )}
+    // </>
+    <div>
+      <PageTitle
+        title="Home"
+        description="Monitor all of your projects and tasks here"
+      />
+
+      <div className="my-10 w-full flex gap-3 flex-wrap lg:flex-nowrap">
+        {ANALYSIS_ITEMS?.map((item: ANALYSIS_TYPE) => {
+          return <AnalysisCard key={uuidv4()} item={item} />;
+        })}
+      </div>
+
+      <div className="w-full flex items-start gap-3 flex-wrap lg:flex-nowrap">
+        <AssignedTask />
+        <ProjectCpn />
+      </div>
+    </div>
   );
 };
 

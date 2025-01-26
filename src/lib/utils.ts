@@ -21,6 +21,7 @@ export const getFirstLetterUppercase = (name: string) => {
   return name.split("")[0].toUpperCase();
 };
 
+// Convert a Firebase serverTimestamp to a date string.
 export const formatTimeStampDate = (
   d: Timestamp | { seconds: number; nanoseconds: number } | null | undefined,
   type: "date" | "datetime"
@@ -32,4 +33,17 @@ export const formatTimeStampDate = (
   if (type === "date") return dayjs(date).format("DD/MM/YYYY");
 
   if (type === "datetime") return dayjs(date).format("DD/MM/YYYY HH:mm:ss");
+};
+
+// Convert a date string (dd/mm/yyyy hh:mm:ss) to Firebase serverTimestamp.
+export const convertToFirebaseTimestamp = (dateString: string) => {
+  const date = dayjs(dateString, "DD/MM/YYYY HH:mm:ss");
+
+  if (!date.isValid()) {
+    throw new Error(
+      "Invalid date format. Expected format: dd/mm/yyyy hh:mm:ss"
+    );
+  }
+
+  return Timestamp.fromMillis(date.valueOf());
 };
