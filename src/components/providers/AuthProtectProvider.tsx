@@ -16,13 +16,14 @@ const AuthProtectProvider = (props: PropType) => {
 
   useEffect(() => {
     if (!loading && !user) router.push("/");
+    if (!loading && user) router.push("/workspace");
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  if (!user) {
+  if (loading) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-screen flex items-center justify-center">
         <Loading width={60} height={60} />
       </div>
     );

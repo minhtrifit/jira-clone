@@ -11,9 +11,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <AuthProtectProvider>
-      <>{children}</>
-    </AuthProtectProvider>
-  );
+  return <>{children}</>;
 }

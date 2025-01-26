@@ -67,8 +67,6 @@ export async function GET(
       }
     }
 
-    console.log(workspaces);
-
     return NextResponse.json(workspaces, { status: 200 });
   } catch (error: any) {
     console.error("Get workspace by user ID failed:", error.message);

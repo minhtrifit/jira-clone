@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import ScreenProvider from "@/components/providers/ScreenProvider";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { ToastContainer } from "react-toastify";
+import AuthProtectProvider from "@/components/providers/AuthProtectProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,28 +33,30 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <ScreenProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <ToastContainer
-                position="bottom-left"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-              />
-              {children}
-            </ThemeProvider>
-          </ScreenProvider>
+          <AuthProtectProvider>
+            <ScreenProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <ToastContainer
+                  position="bottom-left"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick={false}
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="colored"
+                />
+                {children}
+              </ThemeProvider>
+            </ScreenProvider>
+          </AuthProtectProvider>
         </AuthProvider>
       </body>
     </html>
