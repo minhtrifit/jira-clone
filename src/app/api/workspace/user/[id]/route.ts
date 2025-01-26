@@ -35,7 +35,7 @@ export async function GET(
     const q = query(
       joinWorkspaceRef,
       where("userId", "==", id),
-      orderBy("createdAt", "asc") // Need to create index: Get workspace by user ID failed: The query requires an index. You can create it here:
+      orderBy("createdAt", "desc") // Need to create index: Get workspace by user ID failed: The query requires an index. You can create it here:
     );
     const querySnapshot = await getDocs(q);
 
