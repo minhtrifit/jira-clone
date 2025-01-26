@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface WORKSPACE_TYPE {
   id?: string;
   ownerId?: string;
@@ -5,16 +7,16 @@ export interface WORKSPACE_TYPE {
   joinUrl?: string;
   avatarUrl?: string;
   joinUsers?: JOIN_WORKSPACE_TYPE[] | USER_TYPE[];
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: string | Timestamp;
+  updatedAt?: string | Timestamp;
 }
 
 export interface JOIN_WORKSPACE_TYPE {
   id?: string;
   workspaceId?: string;
   userId?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: string | Timestamp;
+  updatedAt?: string | Timestamp;
 }
 
 export interface USER_TYPE {

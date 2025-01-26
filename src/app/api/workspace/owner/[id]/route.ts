@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { WORKSPACE_TYPE } from "@/types";
 import { COLLECTION_NAME } from "@/lib/utils";
 
+// Get workspaces from WORKSPACE_LIST by ownerId
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }

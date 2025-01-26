@@ -5,7 +5,7 @@ interface WorkspaceStoreState {
   workspaces: WORKSPACE_TYPE[];
   loading: boolean;
   error: unknown;
-  getWorkspaces: (ownerId: string) => Promise<void>;
+  getWorkspaces: (userId: string) => Promise<void>;
   createWorkspace: (workspace: WORKSPACE_TYPE) => Promise<void>;
   createJoinWorkspace: (joinWorkspace: JOIN_WORKSPACE_TYPE) => Promise<void>;
   getWorkspaceByJoinUrl: (joinUrl: string) => Promise<void>;
@@ -16,16 +16,13 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set) => ({
   loading: false,
   error: null,
 
-  getWorkspaces: async (ownerId: string) => {
+  getWorkspaces: async (userId: string) => {
     set({ loading: true, error: null });
     try {
-      // Get workspace data
-      const res = await fetch(`/api/workspace/owner/${ownerId}`);
-      if (!res.ok) throw new Error("Get workspace by owner failed!");
+      const res = await fetch(`/api/workspace/user/${userId}`);
+      if (!res.ok) throw new Error("Get workspace by userId failed!");
 
       const data = await res.json();
-
-      // Get join workspace data
 
       await Promise.all(
         data?.map(async (workspace: WORKSPACE_TYPE) => {

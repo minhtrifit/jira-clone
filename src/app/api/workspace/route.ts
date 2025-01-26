@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import dayjs from "dayjs";
 import { db } from "@/lib/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
 import { WORKSPACE_TYPE } from "@/types";
 import { COLLECTION_NAME } from "@/lib/utils";
-
-const formattedDate = dayjs().format("DD/MM/YYYY HH:mm:ss");
 
 export async function POST(req: Request) {
   try {
@@ -39,8 +41,8 @@ export async function POST(req: Request) {
       name: body.name,
       avatarUrl: "",
       joinUrl: body.joinUrl,
-      createdAt: formattedDate,
-      updatedAt: formattedDate,
+      createdAt: serverTimestamp() as Timestamp,
+      updatedAt: serverTimestamp() as Timestamp,
     };
 
     const docRef = await addDoc(workspaceRef, newWorkspace);

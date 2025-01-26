@@ -3,8 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus } from "lucide-react";
 import { USER_TYPE, WORKSPACE_TYPE } from "@/types";
-import { getFirstLetterUppercase } from "@/lib/utils";
+import { formatTimeStampDate, getFirstLetterUppercase } from "@/lib/utils";
 import Link from "next/link";
+import { Timestamp } from "firebase/firestore";
 
 interface PropType {
   isCreated: boolean;
@@ -72,7 +73,10 @@ const WorkspaceBtn = (props: PropType) => {
               <span className="text-[0.75rem] text-gray-500 dark:text-gray-400">
                 Created:{" "}
                 {workspace?.createdAt
-                  ? workspace?.createdAt?.split(" ")[0]
+                  ? formatTimeStampDate(
+                      workspace?.createdAt as Timestamp,
+                      "date"
+                    )
                   : "unknow"}
               </span>
             </CardContent>

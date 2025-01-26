@@ -1,4 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
+import dayjs from "dayjs";
+import { Timestamp } from "firebase/firestore";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -17,4 +19,17 @@ export const COLLECTION_NAME = {
 
 export const getFirstLetterUppercase = (name: string) => {
   return name.split("")[0].toUpperCase();
+};
+
+export const formatTimeStampDate = (
+  d: Timestamp | { seconds: number; nanoseconds: number } | null | undefined,
+  type: "date" | "datetime"
+) => {
+  if (!d) return "Invalid date";
+
+  const date = d instanceof Timestamp ? d.toDate() : new Date(d.seconds * 1000);
+
+  if (type === "date") return dayjs(date).format("DD/MM/YYYY");
+
+  if (type === "datetime") return dayjs(date).format("DD/MM/YYYY HH:mm:ss");
 };
