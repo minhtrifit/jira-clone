@@ -38,8 +38,6 @@ export function WorkspaceSwitcher() {
   const router = useRouter();
   const params = useParams();
 
-  console.log(state);
-
   const [workspaceList, setWorkspaceList] =
     useState<WORKSPACE_TYPE[]>(workspaces);
   const [workspace, setWorkspace] = useState<WORKSPACE_TYPE | null>(null);

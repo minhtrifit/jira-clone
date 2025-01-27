@@ -20,13 +20,28 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuth } from "../providers/AuthProvider";
-import { SLIDEBAR_ITEM_TYPE } from "@/types";
+import { PROJECT_TYPE, SLIDEBAR_ITEM_TYPE } from "@/types";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
+import useTaskStore, { TaskStoreState } from "@/store/task";
+import { useMemo } from "react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user }: any = useAuth();
 
   const { workspace }: WorkspaceStoreState = useWorkspaceStore();
+  const { projects }: TaskStoreState = useTaskStore();
+
+  const PROJECT_ITEMS: SLIDEBAR_ITEM_TYPE[] = useMemo(() => {
+    return (
+      projects?.map((p: PROJECT_TYPE) => {
+        return {
+          title: p.name,
+          url: `/workspace/${workspace?.id ?? "#"}/project/${p?.id}`,
+          icon: p?.avatarUrl ?? "",
+        } as SLIDEBAR_ITEM_TYPE;
+      }) ?? []
+    );
+  }, [workspace?.id, projects]);
 
   const MAIN_ITEMS: SLIDEBAR_ITEM_TYPE[] = [
     {
@@ -62,18 +77,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
   ];
 
-  const PROJECT_ITEMS: SLIDEBAR_ITEM_TYPE[] = [
-    {
-      title: "Design Engineering",
-      url: `/workspace/${workspace?.id ?? "#"}/project/abc-123`,
-      icon: "",
-    },
-    {
-      title: "Fullstack Developing",
-      url: `/workspace/${workspace?.id ?? "#"}/project/abc-123`,
-      icon: "",
-    },
-  ];
+  // const PROJECT_ITEMS: SLIDEBAR_ITEM_TYPE[] = [
+  //   {
+  //     title: "Design Engineering",
+  //     url: `/workspace/${workspace?.id ?? "#"}/project/abc-123`,
+  //     icon: "",
+  //   },
+  //   {
+  //     title: "Fullstack Developing",
+  //     url: `/workspace/${workspace?.id ?? "#"}/project/abc-123`,
+  //     icon: "",
+  //   },
+  // ];
 
   return (
     <Sidebar collapsible="icon" {...props}>

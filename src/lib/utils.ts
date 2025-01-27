@@ -15,6 +15,9 @@ export const COLLECTION_NAME = {
     .NEXT_PUBLIC_FIREBASE_WORKSPACE_JOIN_COLLECTION
     ? process.env.NEXT_PUBLIC_FIREBASE_WORKSPACE_JOIN_COLLECTION
     : "workspace-join-list",
+  ["PROJECT_LIST"]: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_COLLECTION
+    ? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_COLLECTION
+    : "project-list",
 };
 
 export const getFirstLetterUppercase = (name: string) => {

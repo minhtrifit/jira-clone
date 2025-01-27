@@ -10,11 +10,17 @@ import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
 import AssignedTask from "@/components/AssignedTask/AssignedTask";
 import ProjectCpn from "@/components/ProjectsCpn/ProjectCpn";
 import PeopleCpn from "@/components/PeopleCpn/PeopleCpn";
+import useTaskStore, { TaskStoreState } from "@/store/task";
+import { useEffect } from "react";
 
 const WorkspacePage = () => {
   const { workspace, loading }: WorkspaceStoreState = useWorkspaceStore();
+  const { getProjectsByWorkspaceId }: TaskStoreState = useTaskStore();
 
-  console.log(workspace);
+  useEffect(() => {
+    if (workspace?.id) getProjectsByWorkspaceId(workspace?.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspace?.id]);
 
   const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
     {
