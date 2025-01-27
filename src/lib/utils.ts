@@ -18,6 +18,9 @@ export const COLLECTION_NAME = {
   ["PROJECT_LIST"]: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_COLLECTION
     ? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_COLLECTION
     : "project-list",
+  ["TASK_LIST"]: process.env.NEXT_PUBLIC_FIREBASE_TASK_COLLECTION
+    ? process.env.NEXT_PUBLIC_FIREBASE_TASK_COLLECTION
+    : "task-list",
 };
 
 export const getFirstLetterUppercase = (name: string) => {
@@ -38,15 +41,49 @@ export const formatTimeStampDate = (
   if (type === "datetime") return dayjs(date).format("DD/MM/YYYY HH:mm:ss");
 };
 
-// Convert a date string (dd/mm/yyyy hh:mm:ss) to Firebase serverTimestamp.
-export const convertToFirebaseTimestamp = (dateString: string) => {
-  const date = dayjs(dateString, "DD/MM/YYYY HH:mm:ss");
+// Convert a Date to Firebase serverTimestamp.
+export const convertToFirebaseTimestamp = (date: Date): Timestamp => {
+  return Timestamp.fromDate(date);
+};
 
-  if (!date.isValid()) {
-    throw new Error(
-      "Invalid date format. Expected format: dd/mm/yyyy hh:mm:ss"
-    );
-  }
+// Convert a Date to string format dd/mm/yyyy hh:mm:ss
+export const formatToDateStr = (date: Date) => {
+  return dayjs(date).format("DD/MM/YYYY HH:mm:ss");
+};
 
-  return Timestamp.fromMillis(date.valueOf());
+export const formatDateForFirestore = (date: Date) => {
+  const timestamp = Timestamp.fromDate(date);
+
+  return timestamp;
+};
+
+export const STATUS_LIST = [
+  {
+    id: "backlog",
+    title: "Backlog",
+  },
+  {
+    id: "todo",
+    title: "Todo",
+  },
+  {
+    id: "inprogress",
+    title: "In Progress",
+  },
+  {
+    id: "inreview",
+    title: "In Review",
+  },
+  {
+    id: "done",
+    title: "Done",
+  },
+];
+
+export const getStatusObj = (
+  id: "backlog" | "todo" | "inprogress" | "inreview" | "done"
+) => {
+  return STATUS_LIST.find((status) => {
+    return status.id === id;
+  });
 };

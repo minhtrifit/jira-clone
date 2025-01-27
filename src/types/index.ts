@@ -52,10 +52,11 @@ export interface TASK_TYPE {
   id?: string;
   name?: string;
   description?: string;
+  workspaceId?: string;
   projectId?: string;
   project?: PROJECT_TYPE;
   status?: string;
-  dueAt?: string | Timestamp;
+  dueAt?: string | Timestamp | Date;
   createdAt?: string | Timestamp;
   updatedAt?: string | Timestamp;
 }
