@@ -56,6 +56,7 @@ export interface TASK_TYPE {
   description?: string;
   workspaceId?: string;
   assigneeId?: string;
+  assignee?: USER_TYPE;
   projectId?: string;
   project?: PROJECT_TYPE;
   status?: string;

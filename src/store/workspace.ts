@@ -7,6 +7,7 @@ export interface WorkspaceStoreState {
   joinUsers: USER_TYPE[];
   loading: boolean;
   error: unknown;
+  setJoinUsers: (users: USER_TYPE[]) => Promise<USER_TYPE[]>;
   getWorkspaces: (userId: string) => Promise<WORKSPACE_TYPE[]>;
   createWorkspace: (workspace: WORKSPACE_TYPE) => Promise<WORKSPACE_TYPE>;
   createJoinWorkspace: (
@@ -16,12 +17,20 @@ export interface WorkspaceStoreState {
   getWorkspaceByWorkspaceId: (workspaceId: string) => Promise<WORKSPACE_TYPE>;
 }
 
-const useWorkspaceStore = create<WorkspaceStoreState>((set) => ({
+const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
   workspace: null,
   workspaces: [],
   joinUsers: [],
   loading: false,
   error: null,
+
+  setJoinUsers: async (users: USER_TYPE[]) => {
+    set({ joinUsers: users });
+
+    const currentJoinUsers = get().joinUsers;
+
+    return currentJoinUsers;
+  },
 
   getWorkspaces: async (userId: string) => {
     set({ loading: true, error: null });

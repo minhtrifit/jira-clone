@@ -118,6 +118,36 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
 
       const data = await res.json();
 
+      // Get assignee
+      await Promise.all(
+        data?.map(async (task: TASK_TYPE) => {
+          const userResponse = await fetch(`/api/users/${task?.assigneeId}`);
+
+          if (!userResponse.ok)
+            throw new Error("Failed to fetch user details!");
+
+          const assignee: USER_TYPE = await userResponse.json();
+
+          task.assignee = assignee;
+        })
+      );
+
+      // Get project
+      await Promise.all(
+        data?.map(async (task: TASK_TYPE) => {
+          const projectResponse = await fetch(
+            `/api/project/single/project-id/${task?.projectId}`
+          );
+
+          if (!projectResponse.ok)
+            throw new Error("Failed to fetch project for task!");
+
+          const project: PROJECT_TYPE = await projectResponse.json();
+
+          task.project = project;
+        })
+      );
+
       set({ tasks: data, loading: false });
 
       return data;

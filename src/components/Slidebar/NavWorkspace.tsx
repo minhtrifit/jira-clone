@@ -30,6 +30,7 @@ import useTaskStore, { TaskStoreState } from "@/store/task";
 export function WorkspaceSwitcher() {
   const { user }: any = useAuth();
   const {
+    setJoinUsers,
     workspaces,
     getWorkspaces,
     getWorkspaceByWorkspaceId,
@@ -67,6 +68,7 @@ export function WorkspaceSwitcher() {
       const projectsRes = await getProjectsByWorkspaceId(res?.id);
       const tasksRes = await getTasksByWorkspaceId(res?.id);
 
+      setJoinUsers(res?.joinUsers ?? []);
       setProjects(projectsRes);
       setTasks(tasksRes);
     }

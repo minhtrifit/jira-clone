@@ -46,9 +46,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TASK_TYPE } from "@/types";
-import { formatTimeStampDate } from "@/lib/utils";
+import { PROJECT_TYPE, TASK_TYPE, USER_TYPE } from "@/types";
+import { formatTimeStampDate, getFirstLetterUppercase } from "@/lib/utils";
 import { Timestamp } from "firebase/firestore";
 import {
   ArrowDown,
@@ -62,6 +63,7 @@ import {
 } from "lucide-react";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
+import StatusBadgeCpn from "../StatusBadgeCpn/StatusBadgeCpn";
 
 const TableCpn = () => {
   const { user }: any = useAuth();
@@ -153,7 +155,69 @@ const TableCpn = () => {
           </span>
         );
       },
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        const value = info.getValue();
+
+        if (!value) return "---";
+
+        return <span>{value as React.ReactNode}</span>;
+      },
+    },
+    {
+      accessorKey: "project",
+      header: ({ column }) => {
+        return (
+          <span className="flex items-center gap-2">
+            Project {sorting?.length === 0 && <ArrowUpDown size={15} />}
+          </span>
+        );
+      },
+      cell: (info) => {
+        const value = info.getValue() as PROJECT_TYPE;
+
+        if (!value) return "---";
+
+        return (
+          <div className="flex items-center gap-3">
+            <Avatar className="h-6 w-6 rounded-md">
+              <AvatarImage src={value?.avatarUrl} alt={value?.name} />
+              <AvatarFallback className="rounded-md bg-primary text-white text-[0.7rem]">
+                {value?.name ? getFirstLetterUppercase(value?.name) : "U"}
+              </AvatarFallback>
+            </Avatar>{" "}
+            <span>{value?.name as React.ReactNode}</span>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "assignee",
+      header: ({ column }) => {
+        return (
+          <span className="flex items-center gap-2">
+            Assignee {sorting?.length === 0 && <ArrowUpDown size={15} />}
+          </span>
+        );
+      },
+      cell: (info) => {
+        const value = info.getValue() as USER_TYPE;
+
+        if (!value) return "---";
+
+        return (
+          <div className="flex items-center gap-3">
+            <Avatar className="h-6 w-6 rounded-md">
+              <AvatarImage src={value?.photoURL} alt={value?.displayName} />
+              <AvatarFallback className="rounded-md bg-primary text-white text-[0.7rem]">
+                {value?.displayName
+                  ? getFirstLetterUppercase(value?.displayName)
+                  : "U"}
+              </AvatarFallback>
+            </Avatar>{" "}
+            <span>{value?.displayName as React.ReactNode}</span>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "status",
@@ -164,26 +228,32 @@ const TableCpn = () => {
           </span>
         );
       },
-      cell: (info) => info.getValue(),
-    },
-    {
-      accessorKey: "createdAt",
-      header: ({ column }) => {
-        return (
-          <span className="flex items-center gap-2">
-            Created At {sorting?.length === 0 && <ArrowUpDown size={15} />}
-          </span>
-        );
-      },
-      enableSorting: true,
       cell: (info) => {
-        const value = info.getValue() as Timestamp | undefined;
+        const value = info.getValue();
 
         if (!value) return "---";
 
-        return formatTimeStampDate(value, "date");
+        return <StatusBadgeCpn value={value as any} />;
       },
     },
+    // {
+    //   accessorKey: "createdAt",
+    //   header: ({ column }) => {
+    //     return (
+    //       <span className="flex items-center gap-2">
+    //         Created At {sorting?.length === 0 && <ArrowUpDown size={15} />}
+    //       </span>
+    //     );
+    //   },
+    //   enableSorting: true,
+    //   cell: (info) => {
+    //     const value = info.getValue() as Timestamp | undefined;
+
+    //     if (!value) return "---";
+
+    //     return formatTimeStampDate(value, "date");
+    //   },
+    // },
     {
       accessorKey: "dueAt",
       header: ({ column }) => {

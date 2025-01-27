@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,7 @@ import useTaskStore, { TaskStoreState } from "@/store/task";
 import {
   convertTimestampToDate,
   formatDateForFirestore,
+  getFirstLetterUppercase,
   getStatusObj,
   STATUS_LIST,
 } from "@/lib/utils";
@@ -62,6 +64,8 @@ const CreateTaskForm = (props: PropType) => {
     createTask,
     updateTaskById,
   }: TaskStoreState = useTaskStore();
+
+  console.log(joinUsers);
 
   // const [open, setOpen] = useState<boolean>(false);
   const [dueDate, setDueDate] = useState<Date>();
@@ -195,7 +199,22 @@ const CreateTaskForm = (props: PropType) => {
                     {projects?.map((project: PROJECT_TYPE) => {
                       return (
                         <SelectItem key={uuidv4()} value={project?.id ?? ""}>
-                          {project?.name}
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-6 w-6 rounded-md">
+                              <AvatarImage
+                                src={project?.avatarUrl}
+                                alt={project?.name}
+                              />
+                              <AvatarFallback className="rounded-md bg-primary text-white text-[0.7rem]">
+                                {project?.name
+                                  ? getFirstLetterUppercase(project?.name)
+                                  : "U"}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="text-[0.8rem]">
+                              {project?.name}
+                            </span>
+                          </div>
                         </SelectItem>
                       );
                     })}
@@ -221,7 +240,22 @@ const CreateTaskForm = (props: PropType) => {
                     {joinUsers?.map((user: USER_TYPE) => {
                       return (
                         <SelectItem key={uuidv4()} value={user?.uid ?? ""}>
-                          {user?.displayName}
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-6 w-6 rounded-md">
+                              <AvatarImage
+                                src={user?.photoURL}
+                                alt={user?.displayName}
+                              />
+                              <AvatarFallback className="rounded-md bg-primary text-white text-[0.7rem]">
+                                {user?.displayName
+                                  ? getFirstLetterUppercase(user?.displayName)
+                                  : "U"}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="text-[0.8rem]">
+                              {user?.displayName} - {user?.email}
+                            </span>
+                          </div>
                         </SelectItem>
                       );
                     })}
