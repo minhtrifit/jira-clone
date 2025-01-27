@@ -44,7 +44,12 @@ const CreateTaskForm = (props: PropType) => {
   const { user }: any = useAuth();
 
   const { workspace }: WorkspaceStoreState = useWorkspaceStore();
-  const { loading, projects, createTask }: TaskStoreState = useTaskStore();
+  const {
+    loading,
+    projects,
+    getTasksByWorkspaceId,
+    createTask,
+  }: TaskStoreState = useTaskStore();
 
   const [open, setOpen] = useState<boolean>(false);
   const [dueDate, setDueDate] = useState<Date>();
@@ -72,7 +77,7 @@ const CreateTaskForm = (props: PropType) => {
         const createResult = await createTask(newTask);
         console.log("Create new task:", createResult);
 
-        // await getProjectsByWorkspaceId(workspace?.id);
+        await getTasksByWorkspaceId(workspace?.id);
 
         toast.success("Create task successfully");
       }
