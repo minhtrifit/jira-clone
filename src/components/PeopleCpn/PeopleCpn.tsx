@@ -13,8 +13,8 @@ const PeopleCpn = () => {
   const { workspace }: WorkspaceStoreState = useWorkspaceStore();
 
   return (
-    <Card className="px-5 w-full basis:auto lg:basis-full rounded-sm">
-      <CardHeader className="px-0 pt-5 pb-4">
+    <Card className="px-4 w-full basis:auto lg:basis-full rounded-sm">
+      <CardHeader className="px-0 pt-4 pb-4">
         <div className="flex items-center justify-between">
           <h1 className="text-[1.05rem] font-bold">
             People ({workspace?.joinUsers?.length ?? 0})
@@ -24,7 +24,7 @@ const PeopleCpn = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="px-0 pb-5 pt-4 border-t border-dashed border-zinc-300 dark:border-gray-600">
+      <CardContent className="px-0 pb-4 pt-4 border-t border-dashed border-zinc-300 dark:border-gray-600">
         <div className="grid grid-cols-3 gap-4">
           {workspace?.joinUsers?.map((user: USER_TYPE, index: number) => {
             if (index < 3) {

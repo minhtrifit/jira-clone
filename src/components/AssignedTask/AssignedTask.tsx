@@ -10,8 +10,8 @@ const AssignedTask = () => {
   const { workspace }: WorkspaceStoreState = useWorkspaceStore();
 
   return (
-    <Card className="px-5 w-full basis:auto lg:basis-full rounded-sm bg-zinc-100 dark:bg-gray-900">
-      <CardHeader className="px-0 pt-5 pb-4">
+    <Card className="px-4 w-full basis:auto lg:basis-full rounded-sm bg-zinc-100 dark:bg-gray-900">
+      <CardHeader className="px-0 pt-4 pb-4">
         <div className="flex items-center justify-between">
           <h1 className="text-[1.05rem] font-bold">Assigned Tasks (14)</h1>
           <div className="text-white bg-primary rounded-md p-2 hover:bg-primary/90 hover:cursor-pointer">
@@ -19,8 +19,8 @@ const AssignedTask = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="px-0 pb-5 pt-4 border-t border-dashed border-zinc-300 dark:border-gray-600">
-        <div className="mb-5 flex flex-col gap-3">
+      <CardContent className="px-0 pb-4 pt-4 border-t border-dashed border-zinc-300 dark:border-gray-600">
+        <div className="mb-5 flex flex-col gap-2">
           <Card>
             <CardHeader className="pt-5 pb-3 font-bold">
               Implement offline mode
