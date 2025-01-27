@@ -18,6 +18,7 @@ export interface TaskStoreState {
   getTasksByWorkspaceId: (workspaceId: string) => Promise<TASK_TYPE[]>;
   createTask: (task: TASK_TYPE) => Promise<TASK_TYPE>;
   deleteTaskById: (id: string) => Promise<{ message: string }>;
+  updateTaskById: (task: TASK_TYPE) => Promise<TASK_TYPE>;
 }
 
 const useTaskStore = create<TaskStoreState>((set, get) => ({
@@ -156,6 +157,29 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       });
 
       if (!res.ok) throw new Error("Delete task failed!");
+
+      const data = await res.json();
+
+      set({ loading: false });
+
+      return data;
+    } catch (error) {
+      set({ error: error, loading: false });
+    }
+  },
+
+  updateTaskById: async (task: TASK_TYPE) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch(`/api/task/update/task-id/${task?.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+
+      if (!res.ok) throw new Error("Update task failed!");
 
       const data = await res.json();
 

@@ -60,6 +60,7 @@ export interface TASK_TYPE {
   project?: PROJECT_TYPE;
   status?: string;
   dueAt?: string | Timestamp | Date;
+  createdBy?: string;
   createdAt?: string | Timestamp;
   updatedAt?: string | Timestamp;
 }

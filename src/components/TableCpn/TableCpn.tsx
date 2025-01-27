@@ -3,7 +3,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import useTaskStore, { TaskStoreState } from "@/store/task";
+import { useAuth } from "../providers/AuthProvider";
 import {
   ColumnDef,
   useReactTable,
@@ -45,7 +47,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import { TASK_TYPE } from "@/types";
 import { formatTimeStampDate } from "@/lib/utils";
 import { Timestamp } from "firebase/firestore";
@@ -63,6 +64,8 @@ import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
 
 const TableCpn = () => {
+  const { user }: any = useAuth();
+
   const { workspace }: WorkspaceStoreState = useWorkspaceStore();
   const {
     tasks,
@@ -75,7 +78,7 @@ const TableCpn = () => {
 
   const [search, setSearch] = useState("");
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(3);
+  const [pageSize, setPageSize] = useState<number>(5);
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [targetTask, setTargetTask] = useState<TASK_TYPE | null>(null);
@@ -99,6 +102,11 @@ const TableCpn = () => {
   };
 
   const handleDeleteTask = async (task: TASK_TYPE) => {
+    if (user?.uid !== task?.createdBy) {
+      toast.error("You don't have permission to do that");
+      return;
+    }
+
     if (workspace?.id && task?.id) {
       await deleteTaskById(task?.id);
       await getTasksByWorkspaceId(workspace?.id);

@@ -60,6 +60,7 @@ const CreateTaskForm = (props: PropType) => {
     projects,
     getTasksByWorkspaceId,
     createTask,
+    updateTaskById,
   }: TaskStoreState = useTaskStore();
 
   // const [open, setOpen] = useState<boolean>(false);
@@ -100,10 +101,32 @@ const CreateTaskForm = (props: PropType) => {
             projectId: taskForm.projectId,
             status: taskForm.status,
             dueAt: formatDateForFirestore(dueDate),
+            createdBy: user?.uid,
           };
 
           const createResult = await createTask(newTask);
           console.log("Create new task:", createResult);
+        }
+
+        if (isEdit && initValue && user?.uid !== initValue?.createdBy) {
+          toast.error("You don't have permission to do that");
+          return;
+        }
+
+        if (isEdit && initValue && user?.uid === initValue?.createdBy) {
+          const updateTask: TASK_TYPE = {
+            id: initValue?.id,
+            name: taskForm.name,
+            description: taskForm.description,
+            workspaceId: workspace?.id,
+            assigneeId: taskForm.assigneeId,
+            projectId: taskForm.projectId,
+            status: taskForm.status,
+            dueAt: formatDateForFirestore(dueDate),
+          };
+
+          const updateResult = await updateTaskById(updateTask);
+          console.log("Update task:", updateResult);
         }
 
         await getTasksByWorkspaceId(workspace?.id);

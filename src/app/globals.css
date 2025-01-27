@@ -131,7 +131,11 @@
 }
 
 .Toastify__toast-container {
-  font-size: 0.82rem;
+  font-size: 0.9rem;
+}
+
+.Toastify__toast {
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar {
