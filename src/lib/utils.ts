@@ -57,6 +57,14 @@ export const formatDateForFirestore = (date: Date) => {
   return timestamp;
 };
 
+export const convertTimestampToDate = (
+  d: Timestamp | { seconds: number; nanoseconds: number } | null | undefined
+) => {
+  if (!d) return "Invalid date";
+
+  return new Date(d?.seconds * 1000 + d?.nanoseconds / 1e6);
+};
+
 export const STATUS_LIST = [
   {
     id: "backlog",

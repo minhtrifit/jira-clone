@@ -1,4 +1,10 @@
-import { FormEvent, useState } from "react";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import {
@@ -23,27 +29,32 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "../providers/AuthProvider";
 import ButtonCpn from "../ButtonCpn/ButtonCpn";
-import { PROJECT_TYPE, TASK_TYPE } from "@/types";
+import { PROJECT_TYPE, TASK_TYPE, USER_TYPE } from "@/types";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import useTaskStore, { TaskStoreState } from "@/store/task";
 import {
-  convertToFirebaseTimestamp,
+  convertTimestampToDate,
   formatDateForFirestore,
   getStatusObj,
   STATUS_LIST,
 } from "@/lib/utils";
 import { DateTimePicker } from "../DateTimePicker/DateTimePicker";
+import { Timestamp } from "firebase/firestore";
 
 interface PropType {
   children: React.ReactNode;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  isEdit: boolean;
+  initValue: TASK_TYPE | null;
 }
 
 const CreateTaskForm = (props: PropType) => {
-  const { children } = props;
+  const { children, open, setOpen, isEdit, initValue } = props;
 
   const { user }: any = useAuth();
 
-  const { workspace }: WorkspaceStoreState = useWorkspaceStore();
+  const { workspace, joinUsers }: WorkspaceStoreState = useWorkspaceStore();
   const {
     loading,
     projects,
@@ -51,42 +62,61 @@ const CreateTaskForm = (props: PropType) => {
     createTask,
   }: TaskStoreState = useTaskStore();
 
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
   const [dueDate, setDueDate] = useState<Date>();
   const [taskForm, setTaskForm] = useState<TASK_TYPE>({
     name: "",
     projectId: "",
+    assigneeId: "",
     status: getStatusObj("backlog")?.id,
     description: "",
   });
 
-  const handleCreateNewTask = async (e: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (initValue) {
+      console.log(initValue);
+      setTaskForm(initValue);
+      setDueDate(convertTimestampToDate(initValue?.dueAt as Timestamp) as Date);
+    }
+  }, [initValue]);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      if (user?.uid && workspace?.id && taskForm.projectId !== "" && dueDate) {
-        const newTask: TASK_TYPE = {
-          name: taskForm.name,
-          description: taskForm.description,
-          workspaceId: workspace?.id,
-          projectId: taskForm.projectId,
-          status: taskForm.status,
-          dueAt: formatDateForFirestore(dueDate),
-        };
+      if (
+        user?.uid &&
+        workspace?.id &&
+        taskForm?.assigneeId !== "" &&
+        taskForm.projectId !== "" &&
+        dueDate
+      ) {
+        if (!isEdit) {
+          const newTask: TASK_TYPE = {
+            name: taskForm.name,
+            description: taskForm.description,
+            workspaceId: workspace?.id,
+            assigneeId: taskForm.assigneeId,
+            projectId: taskForm.projectId,
+            status: taskForm.status,
+            dueAt: formatDateForFirestore(dueDate),
+          };
 
-        const createResult = await createTask(newTask);
-        console.log("Create new task:", createResult);
+          const createResult = await createTask(newTask);
+          console.log("Create new task:", createResult);
+        }
 
         await getTasksByWorkspaceId(workspace?.id);
 
-        toast.success("Create task successfully");
+        toast.success(`${!isEdit ? "Create" : "Edit"} task successfully`);
       }
     } catch (error) {
-      toast.error("Create task failed");
+      toast.error(`${!isEdit ? "Create" : "Edit"} task failed`);
     } finally {
       setTaskForm({
         name: "",
         projectId: "",
+        assigneeId: "",
         status: getStatusObj("backlog")?.id,
         description: "",
       });
@@ -97,17 +127,19 @@ const CreateTaskForm = (props: PropType) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      {!isEdit && <DialogTrigger asChild>{children}</DialogTrigger>}
+
+      <DialogContent className="max-h-[100vh] overflow-y-auto">
         <form
           onSubmit={(e) => {
-            handleCreateNewTask(e);
+            handleSubmit(e);
           }}
         >
           <DialogHeader>
-            <DialogTitle>Create a task</DialogTitle>
+            <DialogTitle>{!isEdit ? "Create" : "Edit"} a task</DialogTitle>
             <DialogDescription>Manage you work perfectly.</DialogDescription>
           </DialogHeader>
+
           <div className="my-6 flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
@@ -127,6 +159,7 @@ const CreateTaskForm = (props: PropType) => {
               <Label htmlFor="project">Project</Label>
               <Select
                 required
+                defaultValue={taskForm.projectId}
                 onValueChange={(value: string) => {
                   setTaskForm({ ...taskForm, projectId: value });
                 }}
@@ -140,6 +173,32 @@ const CreateTaskForm = (props: PropType) => {
                       return (
                         <SelectItem key={uuidv4()} value={project?.id ?? ""}>
                           {project?.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="assignee">Assignee</Label>
+              <Select
+                required
+                defaultValue={taskForm.assigneeId}
+                onValueChange={(value: string) => {
+                  setTaskForm({ ...taskForm, assigneeId: value });
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a assignee" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {joinUsers?.map((user: USER_TYPE) => {
+                      return (
+                        <SelectItem key={uuidv4()} value={user?.uid ?? ""}>
+                          {user?.displayName}
                         </SelectItem>
                       );
                     })}
@@ -194,8 +253,13 @@ const CreateTaskForm = (props: PropType) => {
               />
             </div>
           </div>
+
           <DialogFooter>
-            <ButtonCpn type="submit" title="Create" loading={loading} />
+            <ButtonCpn
+              type="submit"
+              title={`${!isEdit ? "Create" : "Edit"}`}
+              loading={loading}
+            />
           </DialogFooter>
         </form>
       </DialogContent>

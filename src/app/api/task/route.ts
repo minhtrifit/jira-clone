@@ -11,7 +11,7 @@ import { COLLECTION_NAME } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const body: TASK_TYPE = await req.json();
 
     if (!body.name || typeof body.name !== "string") {
       return NextResponse.json(
@@ -30,6 +30,13 @@ export async function POST(req: Request) {
     if (!body.workspaceId || typeof body.workspaceId !== "string") {
       return NextResponse.json(
         { error: "Workspace ID is required and must be a string" },
+        { status: 400 }
+      );
+    }
+
+    if (!body.assigneeId || typeof body.assigneeId !== "string") {
+      return NextResponse.json(
+        { error: "Assignee ID is required and must be a string" },
         { status: 400 }
       );
     }
@@ -58,12 +65,7 @@ export async function POST(req: Request) {
     const projectRef = collection(db, COLLECTION_NAME.TASK_LIST);
 
     const newTask: TASK_TYPE = {
-      name: body.name,
-      description: body.description,
-      workspaceId: body.workspaceId,
-      projectId: body.projectId,
-      status: body.status,
-      dueAt: body.dueAt,
+      ...body,
       createdAt: serverTimestamp() as Timestamp,
       updatedAt: serverTimestamp() as Timestamp,
     };

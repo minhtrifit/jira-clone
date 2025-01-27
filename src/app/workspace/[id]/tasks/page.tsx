@@ -20,6 +20,8 @@ const MyTasksPage = () => {
   const { workspace, loading }: WorkspaceStoreState = useWorkspaceStore();
   const { getProjectsByWorkspaceId }: TaskStoreState = useTaskStore();
 
+  const [openCreateTaskForm, setOpenCreateTaskForm] = useState<boolean>(false);
+
   useEffect(() => {
     if (workspace?.id) getProjectsByWorkspaceId(workspace?.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,7 +59,12 @@ const MyTasksPage = () => {
                 })}
               </TabsList>
 
-              <CreateTaskForm>
+              <CreateTaskForm
+                isEdit={false}
+                open={openCreateTaskForm}
+                setOpen={setOpenCreateTaskForm}
+                initValue={null}
+              >
                 <ButtonCpn
                   type="button"
                   title="New"

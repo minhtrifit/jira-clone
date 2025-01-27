@@ -22,6 +22,7 @@ export interface JOIN_WORKSPACE_TYPE {
 
 export interface USER_TYPE {
   id?: string;
+  uid?: string; // use for firebase firestore
   displayName?: string;
   email?: string;
   phoneNumber?: string | number;
@@ -44,6 +45,7 @@ export interface PROJECT_TYPE {
   name?: string;
   workspaceId?: string;
   avatarUrl?: string;
+  joinUsers?: JOIN_WORKSPACE_TYPE[] | USER_TYPE[];
   createdAt?: string | Timestamp;
   updatedAt?: string | Timestamp;
 }
@@ -53,6 +55,7 @@ export interface TASK_TYPE {
   name?: string;
   description?: string;
   workspaceId?: string;
+  assigneeId?: string;
   projectId?: string;
   project?: PROJECT_TYPE;
   status?: string;

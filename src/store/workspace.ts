@@ -4,6 +4,7 @@ import { create } from "zustand";
 export interface WorkspaceStoreState {
   workspace: WORKSPACE_TYPE | null;
   workspaces: WORKSPACE_TYPE[];
+  joinUsers: USER_TYPE[];
   loading: boolean;
   error: unknown;
   getWorkspaces: (userId: string) => Promise<WORKSPACE_TYPE[]>;
@@ -18,6 +19,7 @@ export interface WorkspaceStoreState {
 const useWorkspaceStore = create<WorkspaceStoreState>((set) => ({
   workspace: null,
   workspaces: [],
+  joinUsers: [],
   loading: false,
   error: null,
 
@@ -54,6 +56,7 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set) => ({
           );
 
           workspace.joinUsers = userDetails;
+          set({ joinUsers: userDetails });
         })
       );
 

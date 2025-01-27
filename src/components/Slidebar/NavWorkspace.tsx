@@ -25,6 +25,7 @@ import { useAuth } from "../providers/AuthProvider";
 import { WORKSPACE_TYPE } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getFirstLetterUppercase } from "@/lib/utils";
+import useTaskStore, { TaskStoreState } from "@/store/task";
 
 export function WorkspaceSwitcher() {
   const { user }: any = useAuth();
@@ -33,6 +34,12 @@ export function WorkspaceSwitcher() {
     getWorkspaces,
     getWorkspaceByWorkspaceId,
   }: WorkspaceStoreState = useWorkspaceStore();
+  const {
+    setProjects,
+    getProjectsByWorkspaceId,
+    setTasks,
+    getTasksByWorkspaceId,
+  }: TaskStoreState = useTaskStore();
 
   const { state, isMobile } = useSidebar();
   const router = useRouter();
@@ -53,7 +60,16 @@ export function WorkspaceSwitcher() {
 
   const handleGetWorkspace = async () => {
     const res = await getWorkspaceByWorkspaceId(params?.id as string);
-    if (res) setWorkspace(res);
+
+    if (res && res?.id) {
+      setWorkspace(res);
+
+      const projectsRes = await getProjectsByWorkspaceId(res?.id);
+      const tasksRes = await getTasksByWorkspaceId(res?.id);
+
+      setProjects(projectsRes);
+      setTasks(tasksRes);
+    }
   };
 
   useEffect(() => {
