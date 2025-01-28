@@ -91,8 +91,12 @@ export function WorkspaceSwitcher() {
     <SidebarMenu>
       {state === "expanded" && (
         <SidebarMenuItem className="px-2 pt-1 flex items-center">
-          <Image src="/logo.png" width={100} height={100} alt="app-logo" />
-          <h1 className="text-xl font-bold text-primary">Jira Clone</h1>
+          <Image src="/logo.png" width={80} height={80} alt="app-logo" />
+          <h1 className="text-[1.2rem] font-bold text-primary">
+            {process.env.NEXT_PUBLIC_APP_NAME
+              ? process.env.NEXT_PUBLIC_APP_NAME
+              : "Jira Clone"}
+          </h1>
         </SidebarMenuItem>
       )}
 
