@@ -77,7 +77,6 @@ const CreateTaskForm = (props: PropType) => {
 
   useEffect(() => {
     if (initValue) {
-      console.log(initValue);
       setTaskForm(initValue);
 
       if (initValue?.dueAt)

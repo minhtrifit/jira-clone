@@ -36,7 +36,7 @@ const KColumn = (props: PropType) => {
 
   return (
     <Card
-      className={`basis-full bg-zinc-100 dark:bg-slate-900 min-w-[250px] min-h-[600px] max-h-[600px] overflow-y-auto
+      className={`basis-full bg-zinc-100 dark:bg-slate-900 min-w-[280px] min-h-[600px] max-h-[600px] overflow-y-auto
                     flex flex-col items-center rounded-md border border-solid`}
     >
       <CardHeader className="w-full px-3 py-2">

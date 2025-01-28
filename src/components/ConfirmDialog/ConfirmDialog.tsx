@@ -31,7 +31,11 @@ const ConfirmDialog = (props: PropType) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="text-white" onClick={onConfirm}>
+          <AlertDialogAction
+            className="text-white"
+            onClick={onConfirm}
+            disabled={loading}
+          >
             {loading ? "Loading..." : "Confirm"}
           </AlertDialogAction>
         </AlertDialogFooter>

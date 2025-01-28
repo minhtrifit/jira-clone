@@ -75,7 +75,7 @@ const MyTasksPage = () => {
             </div>
           </CardHeader>
 
-          <CardContent className="p-4">
+          <CardContent className="px-4 pt-0 pb-4">
             <div>
               <FilterBar />
             </div>

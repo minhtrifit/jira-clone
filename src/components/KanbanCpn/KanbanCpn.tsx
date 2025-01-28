@@ -130,7 +130,7 @@ const KanbanCpn = () => {
   const task = activeTask ? activeTask : null;
 
   return (
-    <div className="w-full">
+    <div className="w-[calc(100vw-338px)]">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
