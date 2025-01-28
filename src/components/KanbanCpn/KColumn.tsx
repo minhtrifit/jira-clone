@@ -43,7 +43,7 @@ const KColumn = (props: PropType) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <ColumnIcon value={column.id as any} />
-            <span className="text-[0.9rem] font-bold">
+            <span className="text-[0.9rem] font-semibold">
               {column.name} ({getTasksLengthByColumnId(tasks, column.id)})
             </span>
           </div>

@@ -36,7 +36,7 @@ const KTask = (props: PropType) => {
       {...listeners}
     >
       <div className="flex flex-col">
-        <h1 className="text-[0.9rem] font-bold truncate">{task?.name}</h1>
+        <h1 className="text-[0.9rem] font-semibold truncate">{task?.name}</h1>
         <div className="mt-3 pt-3 border-t border-zinc-300 dark:border-zinc-700 border-dashed">
           <p>{task?.description}</p>
         </div>

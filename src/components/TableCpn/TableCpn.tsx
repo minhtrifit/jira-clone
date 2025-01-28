@@ -93,8 +93,10 @@ const TableCpn = () => {
   }, [workspace?.id]);
 
   const filteredData = useMemo(() => {
-    return tasks.filter((task) =>
-      task.name?.toLowerCase().includes(search.toLowerCase())
+    return (
+      tasks?.filter((task) =>
+        task.name?.toLowerCase().includes(search.toLowerCase())
+      ) ?? []
     );
   }, [tasks, search]);
 
@@ -403,7 +405,7 @@ const TableCpn = () => {
                   <TableHead
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    className="cursor-pointer"
+                    className="bg-zinc-100 dark:bg-slate-900 rounded-none cursor-pointer"
                   >
                     {header.isPlaceholder ? null : (
                       <div className="flex items-center gap-2">
@@ -425,7 +427,7 @@ const TableCpn = () => {
 
           <TableBody>
             {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id} className="rounded-none">
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
