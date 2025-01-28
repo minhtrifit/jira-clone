@@ -53,8 +53,12 @@ const LoginCpn = ({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="w-full flex items-center justify-center gap-1">
-        <Image src="/logo.png" width={60} height={60} alt="app-logo" />
-        <h1 className="font-bold text-[1.2rem] uppercase">Jira clone</h1>
+        <Image src="/logo.png" width={80} height={80} alt="app-logo" />
+        <h1 className="font-bold text-[1.2rem] uppercase">
+          {process.env.NEXT_PUBLIC_APP_NAME
+            ? process.env.NEXT_PUBLIC_APP_NAME
+            : "Jira Clone"}
+        </h1>
       </div>
       <Card>
         <CardHeader>

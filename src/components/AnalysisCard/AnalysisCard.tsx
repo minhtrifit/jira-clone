@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
 export interface ANALYSIS_TYPE {
+  id: string;
   title: string;
   count: number;
   analysis: number;

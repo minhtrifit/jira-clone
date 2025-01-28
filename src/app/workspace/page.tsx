@@ -1,19 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
+import { logOut } from "@/lib/firebase.auth";
+import { WORKSPACE_TYPE } from "@/types";
+import { LogOut, Search } from "lucide-react";
 import WorkspaceBtn from "@/components/WorkspaceBtn/WorkspaceBtn";
 import CreateWorkspaceForm from "@/components/CreateWorkspaceForm/CreateWorkspaceForm";
 import Divider from "@/components/Divider/Divider";
-import { useAuth } from "@/components/providers/AuthProvider";
 import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
 import { Input } from "@/components/ui/input";
-import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
-import { WORKSPACE_TYPE } from "@/types";
 import JoinWorkspaceForm from "@/components/JoinWorkspaceForm/JoinWorkspaceForm";
-import { useDebounce } from "@/hooks/useDebounce";
+import { Button } from "@/components/ui/button";
 
 const WorkspacePage = () => {
+  const router = useRouter();
+
   const { user }: any = useAuth();
   const { workspaces, loading, getWorkspaces }: WorkspaceStoreState =
     useWorkspaceStore();
@@ -35,6 +40,11 @@ const WorkspacePage = () => {
     console.log("Search:", filterWorkspace);
 
     setWorkspaceList(filterWorkspace);
+  };
+
+  const handleLogout = () => {
+    logOut();
+    router.push("/");
   };
 
   useEffect(() => {
@@ -77,7 +87,17 @@ const WorkspacePage = () => {
             />
           </div>
 
-          <JoinWorkspaceForm />
+          <div className="flex items-center gap-3">
+            <JoinWorkspaceForm />
+            <Button
+              className="text-gray-600 bg-zinc-200 hover:bg-zinc-300 dark:text-white hover:dark:bg-slate-800 dark:bg-slate-900"
+              onClick={() => {
+                handleLogout();
+              }}
+            >
+              <LogOut /> Log out
+            </Button>
+          </div>
         </div>
       </nav>
 

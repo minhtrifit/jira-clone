@@ -20,7 +20,7 @@ const WorkspaceBtn = (props: PropType) => {
     <>
       {isCreated ? (
         <Card
-          className="w-[300px] h-[300px] border-dashed hover:cursor-pointer"
+          className="w-[300px] h-[300px] border-dashed hover:bg-zinc-100 dark:hover:bg-slate-900 hover:cursor-pointer"
           onClick={onClick}
         >
           <CardContent className="h-full p-6 flex flex-col justify-center items-center gap-3">
@@ -38,7 +38,7 @@ const WorkspaceBtn = (props: PropType) => {
       ) : (
         <Link href={`/workspace/${workspace?.id}`}>
           <Card
-            className="w-[300px] h-[300px] border-dashed hover:cursor-pointer"
+            className="w-[300px] h-[300px] border-dashed hover:bg-zinc-100 dark:hover:bg-slate-900 hover:cursor-pointer"
             onClick={onClick}
           >
             <CardContent className="h-full p-6 flex flex-col items-center justify-center gap-3">

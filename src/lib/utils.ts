@@ -66,6 +66,28 @@ export const convertTimestampToDate = (
   return new Date(d?.seconds * 1000 + d?.nanoseconds / 1e6);
 };
 
+export const calculateDaysLeft = (
+  d:
+    | Timestamp
+    | {
+        seconds: number;
+        nanoseconds: number;
+      }
+    | null
+    | undefined
+): string => {
+  if (!d) return "Invalid date";
+
+  const { seconds, nanoseconds } = d;
+
+  const targetDate = dayjs(seconds * 1000 + Math.floor(nanoseconds / 1e6));
+  const currentDate = dayjs();
+
+  const diffInDays = targetDate.diff(currentDate, "day");
+
+  return diffInDays < 0 ? "Overdue" : `${diffInDays} days left`;
+};
+
 export const STATUS_LIST = [
   {
     id: "backlog",
