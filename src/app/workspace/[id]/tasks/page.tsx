@@ -13,6 +13,7 @@ import TableCpn from "@/components/TableCpn/TableCpn";
 import KanbanCpn from "@/components/KanbanCpn/KanbanCpn";
 import CalendarCpn from "@/components/CalendarCpn/CalendarCpn";
 import CreateTaskForm from "@/components/CreateTaskForm/CreateTaskForm";
+import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
 
 const TAB_CONTENT_LIST = ["Table", "Kanban", "Calendar"];
 
@@ -80,15 +81,21 @@ const MyTasksPage = () => {
               <FilterBar />
             </div>
 
-            <TabsContent value="table">
-              <TableCpn />
-            </TabsContent>
-            <TabsContent value="kanban">
-              <KanbanCpn />
-            </TabsContent>
-            <TabsContent value="calendar">
-              <CalendarCpn />
-            </TabsContent>
+            {loading ? (
+              <SkeletonCard />
+            ) : (
+              <>
+                <TabsContent value="table">
+                  <TableCpn />
+                </TabsContent>
+                <TabsContent value="kanban">
+                  <KanbanCpn />
+                </TabsContent>
+                <TabsContent value="calendar">
+                  <CalendarCpn />
+                </TabsContent>
+              </>
+            )}
           </CardContent>
         </Tabs>
       </Card>

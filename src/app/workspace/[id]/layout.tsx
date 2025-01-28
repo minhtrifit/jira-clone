@@ -12,7 +12,7 @@ export default function Layout({
     <SidebarProvider>
       <AppSidebar />
       <main className="w-full relative">
-        <div className="w-full p-5 my-[43.19px]">
+        <div className="w-full p-5 mt-0 mb-[43.19px]">
           <div className="mb-5 flex items-center justify-between gap-3">
             <SidebarTrigger />
             <ModeToggle />
