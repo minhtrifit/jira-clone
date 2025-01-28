@@ -1,3 +1,4 @@
+import { KANBAN_COLUMN_TYPE } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
 import { Timestamp } from "firebase/firestore";
@@ -95,3 +96,31 @@ export const getStatusObj = (
     return status.id === id;
   });
 };
+
+export const COLUMNS_DATA: KANBAN_COLUMN_TYPE[] = [
+  {
+    id: "backlog",
+    name: "Backlog",
+    count: 0,
+  },
+  {
+    id: "todo",
+    name: "Todo",
+    count: 0,
+  },
+  {
+    id: "inprogress",
+    name: "In Progress",
+    count: 0,
+  },
+  {
+    id: "inreview",
+    name: "In Review",
+    count: 0,
+  },
+  {
+    id: "done",
+    name: "Done",
+    count: 0,
+  },
+];

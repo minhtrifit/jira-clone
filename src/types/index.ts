@@ -65,3 +65,9 @@ export interface TASK_TYPE {
   createdAt?: string | Timestamp;
   updatedAt?: string | Timestamp;
 }
+
+export interface KANBAN_COLUMN_TYPE {
+  id: string;
+  name: string;
+  count: number;
+}

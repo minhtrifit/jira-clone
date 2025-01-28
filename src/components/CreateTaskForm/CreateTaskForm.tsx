@@ -65,8 +65,6 @@ const CreateTaskForm = (props: PropType) => {
     updateTaskById,
   }: TaskStoreState = useTaskStore();
 
-  console.log(joinUsers);
-
   // const [open, setOpen] = useState<boolean>(false);
   const [dueDate, setDueDate] = useState<Date>();
   const [taskForm, setTaskForm] = useState<TASK_TYPE>({
@@ -81,7 +79,11 @@ const CreateTaskForm = (props: PropType) => {
     if (initValue) {
       console.log(initValue);
       setTaskForm(initValue);
-      setDueDate(convertTimestampToDate(initValue?.dueAt as Timestamp) as Date);
+
+      if (initValue?.dueAt)
+        setDueDate(
+          convertTimestampToDate(initValue?.dueAt as Timestamp) as Date
+        );
     }
   }, [initValue]);
 
