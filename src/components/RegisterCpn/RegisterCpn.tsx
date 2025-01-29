@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, handleFirebaseError } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -112,13 +112,24 @@ const RegisterCpn = ({
       if (registerForm.email && registerForm.password) {
         setLoading(true);
 
-        await signUp(
+        const authRes = await signUp(
           registerForm.displayName,
           registerForm.email,
           registerForm.password
         );
-        router.push("/");
-        toast.success("Register successfully!");
+
+        console.log(authRes);
+
+        if (authRes?.user === null) {
+          toast.error(handleFirebaseError(authRes?.message));
+          setLoading(false);
+          return;
+        }
+
+        if (authRes?.user !== null) {
+          router.push("/");
+          toast.success("Register successfully!");
+        }
 
         setRegisterForm({
           email: "",

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./AuthProvider";
 import Loading from "@/components/Loading/Loading";
+import { toast } from "react-toastify";
 
 interface PropType {
   children: React.ReactElement;
@@ -16,7 +17,10 @@ const AuthProtectProvider = (props: PropType) => {
 
   useEffect(() => {
     if (!loading && !user) router.push("/");
-    if (!loading && user) router.push("/workspace");
+    if (!loading && user) {
+      toast.success("Login successfully");
+      router.push("/workspace");
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);

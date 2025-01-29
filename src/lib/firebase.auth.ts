@@ -28,10 +28,10 @@ export const signUp = async (
       displayName: displayName,
     });
 
-    return user;
-  } catch (error) {
+    return { message: "Create account successfully", user };
+  } catch (error: any) {
     console.error("Create account failed!:", error);
-    return null;
+    return { message: error?.message, user: null };
   }
 };
 

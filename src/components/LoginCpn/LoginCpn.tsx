@@ -27,7 +27,7 @@ const LoginCpn = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
-  const { loading }: any = useAuth();
+  // const { loading }: any = useAuth();
   const router = useRouter();
 
   const [loginForm, setLoginForm] = useState<LOGIN_FORM_TYPE>({
@@ -38,6 +38,7 @@ const LoginCpn = ({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleLoginFormError = (
     loginForm: LOGIN_FORM_TYPE,
@@ -77,14 +78,18 @@ const LoginCpn = ({
 
       if (isFormError) return;
 
+      setLoading(true);
+
       await signIn(loginForm.email, loginForm.password);
       router.push("/workspace");
-      toast.success("Login successfully!");
+      // toast.success("Login successfully!");
 
       setLoginForm({ email: "", password: "" });
+      setLoading(false);
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Email or password wrong!");
+      setLoading(false);
     }
   };
 

@@ -175,3 +175,16 @@ export const COLUMNS_DATA: KANBAN_COLUMN_TYPE[] = [
     count: 0,
   },
 ];
+
+export const handleFirebaseError = (message: string) => {
+  if (message === "Firebase: Error (auth/email-already-in-use).")
+    return "Email already in use";
+
+  if (
+    message ===
+    "Firebase: Password should be at least 6 characters (auth/weak-password)."
+  )
+    return "Password should be at least 6 characters";
+
+  return "Something wrong";
+};
