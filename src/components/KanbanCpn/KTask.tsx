@@ -88,6 +88,12 @@ const KTask = (props: PropType) => {
     }
   };
 
+  if (isDragging) {
+    return (
+      <Card className="w-full h-[152.4px] bg-zinc-200 dark:bg-slate-800 rounded-none"></Card>
+    );
+  }
+
   return (
     <>
       <ConfirmDialog
