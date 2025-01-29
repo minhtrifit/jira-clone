@@ -102,7 +102,7 @@ export function WorkspaceSwitcher() {
         </SidebarMenuItem>
       )}
 
-      <SidebarMenuItem className="my-3 py-2 border-gray-400 dark:border-gray-600 border-y border-dashed">
+      <SidebarMenuItem className="mt-3 mb-0 py-2 border-gray-300 dark:border-gray-600 border-y border-dashed">
         <SidebarGroupLabel>
           <div className="w-full flex items-center justify-between">
             <span>Workspace</span>

@@ -65,7 +65,6 @@ const CreateTaskForm = (props: PropType) => {
     updateTaskById,
   }: TaskStoreState = useTaskStore();
 
-  // const [open, setOpen] = useState<boolean>(false);
   const [dueDate, setDueDate] = useState<Date>();
   const [taskForm, setTaskForm] = useState<TASK_TYPE>({
     name: "",
@@ -73,6 +72,14 @@ const CreateTaskForm = (props: PropType) => {
     assigneeId: "",
     status: getStatusObj("backlog")?.id,
     description: "",
+  });
+  const [taskFormError, setTaskFormError] = useState<TASK_TYPE>({
+    name: "",
+    projectId: "",
+    assigneeId: "",
+    status: "",
+    description: "",
+    dueAt: "",
   });
 
   useEffect(() => {
@@ -86,58 +93,131 @@ const CreateTaskForm = (props: PropType) => {
     }
   }, [initValue]);
 
+  const handleTaskFormError = (
+    taskForm: TASK_TYPE,
+    dueDate: Date | undefined,
+    setTaskFormError: (value: SetStateAction<TASK_TYPE>) => void
+  ) => {
+    let isError: boolean = false;
+    let taskFormErrObj: TASK_TYPE = {
+      name: "",
+      projectId: "",
+      assigneeId: "",
+      status: "",
+      description: "",
+      dueAt: "",
+    };
+
+    if (taskForm.name === "") {
+      taskFormErrObj = { ...taskFormErrObj, name: "Name can not be empty" };
+      isError = true;
+    }
+
+    if (taskForm.projectId === "") {
+      taskFormErrObj = {
+        ...taskFormErrObj,
+        projectId: "Project at can not be empty",
+      };
+      isError = true;
+    }
+
+    if (taskForm.assigneeId === "") {
+      taskFormErrObj = {
+        ...taskFormErrObj,
+        assigneeId: "Assignee can not be empty",
+      };
+      isError = true;
+    }
+
+    if (taskForm.status === "") {
+      taskFormErrObj = {
+        ...taskFormErrObj,
+        status: "Status can not be empty",
+      };
+      isError = true;
+    }
+
+    if (!dueDate) {
+      taskFormErrObj = {
+        ...taskFormErrObj,
+        dueAt: "Due at can not be empty",
+      };
+      isError = true;
+    }
+
+    if (taskForm.description === "") {
+      taskFormErrObj = {
+        ...taskFormErrObj,
+        description: "Description can not be empty",
+      };
+      isError = true;
+    }
+
+    setTaskFormError(taskFormErrObj);
+    return isError;
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const isFormError: boolean = handleTaskFormError(
+      taskForm,
+      dueDate,
+      setTaskFormError
+    );
+
+    if (isFormError) return;
+
     try {
       if (
-        user?.uid &&
-        workspace?.id &&
-        taskForm?.assigneeId !== "" &&
-        taskForm.projectId !== "" &&
-        dueDate
-      ) {
-        if (!isEdit) {
-          const newTask: TASK_TYPE = {
-            name: taskForm.name,
-            description: taskForm.description,
-            workspaceId: workspace?.id,
-            assigneeId: taskForm.assigneeId,
-            projectId: taskForm.projectId,
-            status: taskForm.status,
-            dueAt: formatDateForFirestore(dueDate),
-            createdBy: user?.uid,
-          };
+        !user?.uid ||
+        user?.uid === "" ||
+        !workspace?.id ||
+        workspace?.id === "" ||
+        !dueDate
+      )
+        return;
 
-          const createResult = await createTask(newTask);
-          console.log("Create new task:", createResult);
-        }
+      if (!isEdit) {
+        const newTask: TASK_TYPE = {
+          name: taskForm.name,
+          description: taskForm.description,
+          workspaceId: workspace.id,
+          assigneeId: taskForm.assigneeId,
+          projectId: taskForm.projectId,
+          status: taskForm.status,
+          dueAt: formatDateForFirestore(dueDate),
+          createdBy: user.uid,
+        };
 
-        if (isEdit && initValue && user?.uid !== initValue?.createdBy) {
-          toast.error("You don't have permission to do that");
-          return;
-        }
-
-        if (isEdit && initValue && user?.uid === initValue?.createdBy) {
-          const updateTask: TASK_TYPE = {
-            id: initValue?.id,
-            name: taskForm.name,
-            description: taskForm.description,
-            workspaceId: workspace?.id,
-            assigneeId: taskForm.assigneeId,
-            projectId: taskForm.projectId,
-            status: taskForm.status,
-            dueAt: formatDateForFirestore(dueDate),
-          };
-
-          const updateResult = await updateTaskById(updateTask);
-          console.log("Update task:", updateResult);
-        }
-
-        await getTasksByWorkspaceId(workspace?.id);
-
-        toast.success(`${!isEdit ? "Create" : "Edit"} task successfully`);
+        const createResult = await createTask(newTask);
+        console.log("Create new task:", createResult);
       }
+
+      if (isEdit && initValue && user?.uid !== initValue?.createdBy) {
+        toast.error("You don't have permission to do that");
+        return;
+      }
+
+      if (isEdit && initValue && user?.uid === initValue?.createdBy) {
+        const updateTask: TASK_TYPE = {
+          id: initValue?.id,
+          name: taskForm.name,
+          description: taskForm.description,
+          workspaceId: workspace?.id,
+          assigneeId: taskForm.assigneeId,
+          projectId: taskForm.projectId,
+          status: taskForm.status,
+          dueAt: formatDateForFirestore(dueDate),
+        };
+
+        const updateResult = await updateTaskById(updateTask);
+        console.log("Update task:", updateResult);
+      }
+
+      await getTasksByWorkspaceId(workspace?.id);
+
+      toast.success(`${!isEdit ? "Create" : "Edit"} task successfully`);
     } catch (error) {
       toast.error(`${!isEdit ? "Create" : "Edit"} task failed`);
     } finally {
@@ -150,6 +230,14 @@ const CreateTaskForm = (props: PropType) => {
       });
       setDueDate(undefined);
       setOpen(false);
+      setTaskFormError({
+        name: "",
+        projectId: "",
+        assigneeId: "",
+        status: "",
+        description: "",
+        dueAt: "",
+      });
     }
   };
 
@@ -157,7 +245,10 @@ const CreateTaskForm = (props: PropType) => {
     <Dialog open={open} onOpenChange={setOpen}>
       {!isEdit && <DialogTrigger asChild>{children}</DialogTrigger>}
 
-      <DialogContent className="max-h-[100vh] overflow-y-auto">
+      <DialogContent
+        className="max-h-[100vh] overflow-y-auto"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <form
           onSubmit={(e) => {
             handleSubmit(e);
@@ -174,22 +265,27 @@ const CreateTaskForm = (props: PropType) => {
               <Input
                 id="name"
                 type="text"
-                required
                 placeholder="eg: being-a-chill-guy"
                 value={taskForm.name}
                 onChange={(e) => {
                   setTaskForm({ ...taskForm, name: e.target.value });
+                  setTaskFormError({ ...taskFormError, name: "" });
                 }}
               />
+              {taskFormError.name && (
+                <span className="text-[0.85rem] text-red-500">
+                  {taskFormError.name}
+                </span>
+              )}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="project">Project</Label>
               <Select
-                required
                 defaultValue={taskForm.projectId}
                 onValueChange={(value: string) => {
                   setTaskForm({ ...taskForm, projectId: value });
+                  setTaskFormError({ ...taskFormError, projectId: "" });
                 }}
               >
                 <SelectTrigger>
@@ -222,15 +318,20 @@ const CreateTaskForm = (props: PropType) => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {taskFormError.projectId && (
+                <span className="text-[0.85rem] text-red-500">
+                  {taskFormError.projectId}
+                </span>
+              )}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="assignee">Assignee</Label>
               <Select
-                required
                 defaultValue={taskForm.assigneeId}
                 onValueChange={(value: string) => {
                   setTaskForm({ ...taskForm, assigneeId: value });
+                  setTaskFormError({ ...taskFormError, assigneeId: "" });
                 }}
               >
                 <SelectTrigger>
@@ -263,15 +364,20 @@ const CreateTaskForm = (props: PropType) => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {taskFormError.assigneeId && (
+                <span className="text-[0.85rem] text-red-500">
+                  {taskFormError.assigneeId}
+                </span>
+              )}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="status">Status</Label>
               <Select
-                required
                 defaultValue={taskForm.status}
                 onValueChange={(value: string) => {
                   setTaskForm({ ...taskForm, status: value });
+                  setTaskFormError({ ...taskFormError, status: "" });
                 }}
               >
                 <SelectTrigger>
@@ -291,24 +397,45 @@ const CreateTaskForm = (props: PropType) => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {taskFormError.status && (
+                <span className="text-[0.85rem] text-red-500">
+                  {taskFormError.status}
+                </span>
+              )}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="status">Due Date</Label>
-              <DateTimePicker date={dueDate as Date} setDate={setDueDate} />
+              <DateTimePicker
+                date={dueDate as Date}
+                setDate={(e) => {
+                  setDueDate(e);
+                  setTaskFormError({ ...taskFormError, dueAt: "" });
+                }}
+              />
+              {taskFormError.dueAt && (
+                <span className="text-[0.85rem] text-red-500">
+                  {taskFormError.dueAt as string}
+                </span>
+              )}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="name">Description</Label>
               <Textarea
                 id="description"
-                required
                 placeholder="Type your task description here."
                 value={taskForm.description}
                 onChange={(e) => {
                   setTaskForm({ ...taskForm, description: e.target.value });
+                  setTaskFormError({ ...taskFormError, description: "" });
                 }}
               />
+              {taskFormError.description && (
+                <span className="text-[0.85rem] text-red-500">
+                  {taskFormError.description}
+                </span>
+              )}
             </div>
           </div>
 

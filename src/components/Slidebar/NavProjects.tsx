@@ -1,13 +1,9 @@
 "use client";
 
-import {
-  Folder,
-  Forward,
-  MoreHorizontal,
-  Trash2,
-  type LucideIcon,
-} from "lucide-react";
-
+import { useState } from "react";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
+import Link from "next/link";
+import { Folder, Forward, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,10 +21,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SLIDEBAR_ITEM_TYPE } from "@/types";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getFirstLetterUppercase } from "@/lib/utils";
-import Link from "next/link";
-import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
+import CreateProjectForm from "../CreateProjectForm/CreateProjectForm";
 
 interface PropType {
   items: SLIDEBAR_ITEM_TYPE[];
@@ -43,7 +38,19 @@ export function NavProjects(props: PropType) {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>
+        <CreateProjectForm>
+          <div className="w-full flex items-center justify-between">
+            <span>Projects</span>
+            <button
+              className="bg-primary hover:bg-primary/90 p-1 rounded-full text-white"
+              onClick={() => {}}
+            >
+              <Plus size={12} />
+            </button>
+          </div>
+        </CreateProjectForm>
+      </SidebarGroupLabel>
       <SidebarMenu>
         {items?.map((item: SLIDEBAR_ITEM_TYPE, index: number) => {
           if (index < 3) {
