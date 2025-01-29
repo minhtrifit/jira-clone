@@ -44,24 +44,26 @@ const AssignedTask = () => {
         <div className="mb-5 flex flex-col gap-2">
           {tasks?.length === 0 && <Empty size={40} />}
 
-          {tasks?.map((task: TASK_TYPE) => {
-            return (
-              <Card key={uuidv4()}>
-                <CardHeader className="pt-3 pb-3 font-bold">
-                  {task?.name}
-                </CardHeader>
-                <CardContent className="pb-3">
-                  <div className="flex items-end gap-5">
-                    <span className="text-sm">{task?.project?.name}</span>
-                    <span className="flex items-center gap-1 text-[0.8rem] text-gray-400">
-                      <Calendar size={15} />{" "}
-                      {task?.dueAt &&
-                        calculateDaysLeft(task?.dueAt as Timestamp)}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            );
+          {tasks?.map((task: TASK_TYPE, index: number) => {
+            if (index < 3) {
+              return (
+                <Card key={uuidv4()}>
+                  <CardHeader className="pt-3 pb-3 font-bold">
+                    {task?.name}
+                  </CardHeader>
+                  <CardContent className="pb-3">
+                    <div className="flex items-end gap-5">
+                      <span className="text-sm">{task?.project?.name}</span>
+                      <span className="flex items-center gap-1 text-[0.8rem] text-gray-400">
+                        <Calendar size={15} />{" "}
+                        {task?.dueAt &&
+                          calculateDaysLeft(task?.dueAt as Timestamp)}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            }
           })}
         </div>
 

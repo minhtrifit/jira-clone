@@ -88,6 +88,28 @@ export const calculateDaysLeft = (
   return diffInDays < 0 ? "Overdue" : `${diffInDays} days left`;
 };
 
+export const convertTimestampToFullCalendar = (
+  d:
+    | Timestamp
+    | {
+        seconds: number;
+        nanoseconds: number;
+      }
+    | null
+    | undefined
+): string => {
+  if (!d) return "Invalid date";
+
+  const date = new Date(d.seconds * 1000);
+  return date.toISOString();
+};
+
+// Format: Thu Jan 16 2025 19:00:00 GMT+0700 to Firebase timestamp
+export function convertDateStrToTimestamp(dateString: string): Timestamp {
+  const date = new Date(dateString);
+  return Timestamp.fromDate(date);
+}
+
 export const STATUS_LIST = [
   {
     id: "backlog",

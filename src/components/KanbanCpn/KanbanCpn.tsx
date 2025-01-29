@@ -65,27 +65,24 @@ const KanbanCpn = () => {
     if (!over) return;
 
     const activeColumnId = active.data.current?.sortable.containerId;
-    const activeColumn = columns.filter((col) => col.id === activeColumnId)[0];
+    const activeColumn = columns.find((col) => col.id === activeColumnId);
+    const overColumn = columns.find((col) => col.id === over.id);
 
-    const overColumnId = over.id;
-    const overColumn = columns.filter((col) => col.id === overColumnId)[0];
-
-    const overTaskId = over.id;
-    const overTask = taskList.filter((task) => task.id === overTaskId)[0];
+    const overTask = taskList.find((task) => task.id === over.id);
 
     if (!activeTask || !activeColumn) return;
 
     // Drop task over task
-    if (overTask && overColumn === undefined && activeTask !== overTask) {
+    if (overTask && !overColumn && activeTask !== overTask) {
       setTaskList((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeTask.id);
         const overIndex = tasks.findIndex((t) => t.id === overTask.id);
 
-        if (tasks[activeIndex].status != tasks[overIndex].status) {
+        if (tasks[activeIndex].status !== tasks[overIndex].status) {
           tasks[activeIndex].status = tasks[overIndex].status;
           activeTask.status = tasks[overIndex].status;
 
-          return arrayMove(tasks, activeIndex, overIndex - 1);
+          return arrayMove(tasks, activeIndex, overIndex - 1); // or another logic if needed
         }
 
         return arrayMove(tasks, activeIndex, overIndex);
@@ -93,14 +90,14 @@ const KanbanCpn = () => {
     }
 
     // Drop task over column
-    if (overTask === undefined && overColumn && activeColumn !== overColumn) {
+    if (!overTask && overColumn && activeColumn !== overColumn) {
       setTaskList((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeTask.id);
 
         tasks[activeIndex].status = overColumn.id;
         activeTask.status = overColumn.id;
 
-        return arrayMove(tasks, activeIndex, activeIndex);
+        return arrayMove(tasks, activeIndex, activeIndex); // Check if moving within the same column is needed
       });
     }
   };
@@ -122,6 +119,8 @@ const KanbanCpn = () => {
 
       const updateResult = await updateTaskById(updateTask);
       console.log("Update task:", updateResult);
+
+      // await getTasksByWorkspaceId(workspace?.id);
     }
 
     setActiveTask(null);
@@ -138,7 +137,7 @@ const KanbanCpn = () => {
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className="w-full flex gap-3 overflow-x-auto">
+        <div className="w-full flex gap-5 overflow-x-auto">
           {columns?.map((col) => {
             return (
               <KColumn

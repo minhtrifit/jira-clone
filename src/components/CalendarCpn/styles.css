@@ -1,0 +1,27 @@
+.fc-event {
+  border: none;
+}
+
+.fc .fc-col-header-cell.fc-day {
+  color: gray;
+}
+
+.fc .fc-day {
+  border: none;
+  border: 1px solid #dedede;
+  font-size: 0.9rem;
+  color: gray;
+}
+
+.fc .fc-daygrid-day-frame {
+  max-height: 50px;
+  overflow-y: auto;
+}
+
+/* .fc-theme-standard th {
+  border: none;
+}
+
+.fc-theme-standard td {
+  border: none;
+} */
