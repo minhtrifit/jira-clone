@@ -16,6 +16,7 @@ import PeopleCpn from "@/components/PeopleCpn/PeopleCpn";
 import { TASK_TYPE } from "@/types";
 import { calculateDaysLeft } from "@/lib/utils";
 import { Timestamp } from "firebase/firestore";
+import { useParams } from "next/navigation";
 
 const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
   {
@@ -57,6 +58,9 @@ const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
 
 const DetailWorkspacePage = () => {
   const { user }: any = useAuth();
+
+  const params = useParams();
+  const workspaceIdParams = params?.id;
 
   const { workspace, loading }: WorkspaceStoreState = useWorkspaceStore();
   const { projects, tasks, getProjectsByWorkspaceId }: TaskStoreState =
@@ -113,10 +117,16 @@ const DetailWorkspacePage = () => {
     });
   }, [projects, tasks, user?.uid]);
 
+  // useEffect(() => {
+  //   if (workspace?.id) getProjectsByWorkspaceId(workspace?.id);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [workspace?.id]);
+
   useEffect(() => {
-    if (workspace?.id) getProjectsByWorkspaceId(workspace?.id);
+    if (workspaceIdParams)
+      getProjectsByWorkspaceId(workspaceIdParams as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspace?.id]);
+  }, [workspaceIdParams]);
 
   return (
     <>

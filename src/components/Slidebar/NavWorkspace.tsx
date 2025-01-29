@@ -46,6 +46,8 @@ export function WorkspaceSwitcher() {
   const router = useRouter();
   const params = useParams();
 
+  const workspaceId = params?.id;
+
   const [workspaceList, setWorkspaceList] =
     useState<WORKSPACE_TYPE[]>(workspaces);
   const [workspace, setWorkspace] = useState<WORKSPACE_TYPE | null>(null);
@@ -60,7 +62,7 @@ export function WorkspaceSwitcher() {
   }, [workspaces]);
 
   const handleGetWorkspace = async () => {
-    const res = await getWorkspaceByWorkspaceId(params?.id as string);
+    const res = await getWorkspaceByWorkspaceId(workspaceId as string);
 
     if (res && res?.id) {
       setWorkspace(res);
@@ -75,9 +77,9 @@ export function WorkspaceSwitcher() {
   };
 
   useEffect(() => {
-    if (params?.id && user?.uid) handleGetWorkspace();
+    if (workspaceId && user?.uid) handleGetWorkspace();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, user?.id]);
+  }, [workspaceId, user?.id]);
 
   const handleChangeWorkspace = (id: string) => {
     router.push(`/workspace/${id}`);
