@@ -49,7 +49,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PROJECT_TYPE, TASK_TYPE, USER_TYPE } from "@/types";
-import { formatTimeStampDate, getFirstLetterUppercase } from "@/lib/utils";
+import {
+  formatTimeStampDate,
+  getFirstLetterUppercase,
+  STATUS_TYPE_LIST,
+} from "@/lib/utils";
 import { Timestamp } from "firebase/firestore";
 import {
   ArrowDown,
@@ -111,11 +115,16 @@ const TableCpn = () => {
       return;
     }
 
-    if (workspace?.id && task?.id) {
-      await deleteTaskById(task?.id);
-      await getTasksByWorkspaceId(workspace?.id);
+    try {
+      if (workspace?.id && task?.id) {
+        await deleteTaskById(task?.id);
+        await getTasksByWorkspaceId(workspace?.id);
 
-      toast.success("Delete task successfully");
+        toast.success("Delete task successfully");
+      }
+    } catch (error) {
+      console.log("Delete task failed:", error);
+      toast.error("Delete task failed");
     }
   };
 
@@ -235,7 +244,7 @@ const TableCpn = () => {
 
         if (!value) return "---";
 
-        return <StatusBadgeCpn value={value as any} />;
+        return <StatusBadgeCpn value={value as STATUS_TYPE_LIST} />;
       },
     },
     // {

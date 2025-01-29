@@ -3,12 +3,14 @@ import {
   PROJECT_TYPE,
   TASK_TYPE,
   USER_TYPE,
+  WORKSPACE_TYPE,
 } from "@/types";
 import { create } from "zustand";
 
 export interface TaskStoreState {
   projects: PROJECT_TYPE[];
   tasks: TASK_TYPE[];
+  task: TASK_TYPE | null;
   loading: boolean;
   error: unknown;
   setProjects: (projects: PROJECT_TYPE[]) => Promise<PROJECT_TYPE[]>;
@@ -16,6 +18,7 @@ export interface TaskStoreState {
   createProject: (project: PROJECT_TYPE) => Promise<PROJECT_TYPE>;
   setTasks: (tasks: TASK_TYPE[]) => Promise<TASK_TYPE[]>;
   getTasksByWorkspaceId: (workspaceId: string) => Promise<TASK_TYPE[]>;
+  getTaskByTaskId: (taskId: string) => Promise<TASK_TYPE | null>;
   createTask: (task: TASK_TYPE) => Promise<TASK_TYPE>;
   deleteTaskById: (id: string) => Promise<{ message: string }>;
   updateTaskById: (task: TASK_TYPE) => Promise<TASK_TYPE>;
@@ -24,6 +27,7 @@ export interface TaskStoreState {
 const useTaskStore = create<TaskStoreState>((set, get) => ({
   projects: [],
   tasks: [],
+  task: null,
   loading: false,
   error: null,
 
@@ -108,6 +112,65 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
     const currentTasks = get().tasks;
 
     return currentTasks;
+  },
+
+  getTaskByTaskId: async (taskId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch(`/api/task/single/task-id/${taskId}`);
+      if (!res.ok) throw new Error("Get task by task ID failed!");
+
+      const data = await res.json();
+
+      if (!data) {
+        set({ task: null, loading: false });
+        return null;
+      }
+
+      // Get assignee
+      const userResponse = await fetch(`/api/users/${data?.assigneeId}`);
+
+      if (!userResponse.ok) throw new Error("Failed to fetch user details!");
+
+      const assignee: USER_TYPE = await userResponse.json();
+      data.assignee = assignee;
+
+      // Get created user
+      const createdByResponse = await fetch(`/api/users/${data?.createdBy}`);
+
+      if (!createdByResponse.ok)
+        throw new Error("Failed to fetch user details!");
+
+      const createdBy: USER_TYPE = await createdByResponse.json();
+      data.createdUser = createdBy;
+
+      // Get workspace
+      const workspaceRes = await fetch(
+        `/api/workspace/workspace-id/${data?.workspaceId}`
+      );
+      if (!workspaceRes.ok)
+        throw new Error("Get workspace by workspace ID failed!");
+
+      const workspace: WORKSPACE_TYPE = await workspaceRes.json();
+      data.workspace = workspace;
+
+      // Get project
+      const projectResponse = await fetch(
+        `/api/project/single/project-id/${data?.projectId}`
+      );
+
+      if (!projectResponse.ok)
+        throw new Error("Failed to fetch project for task!");
+
+      const project: PROJECT_TYPE = await projectResponse.json();
+      data.project = project;
+
+      set({ task: data, loading: false });
+
+      return data;
+    } catch (error) {
+      set({ error: error, loading: false });
+    }
   },
 
   getTasksByWorkspaceId: async (workspaceId: string) => {

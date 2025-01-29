@@ -55,6 +55,7 @@ export interface TASK_TYPE {
   name?: string;
   description?: string;
   workspaceId?: string;
+  workspace?: WORKSPACE_TYPE;
   assigneeId?: string;
   assignee?: USER_TYPE;
   projectId?: string;
@@ -62,6 +63,7 @@ export interface TASK_TYPE {
   status?: string;
   dueAt?: string | Timestamp | Date;
   createdBy?: string;
+  createdUser?: USER_TYPE;
   createdAt?: string | Timestamp;
   updatedAt?: string | Timestamp;
 }

@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { PROJECT_TYPE } from "@/types";
 import { COLLECTION_NAME } from "@/lib/utils";
 
-// Get project from PROEJCT_LIST by projectId
+// Get task from TASK_LIST by taskId
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -13,12 +22,12 @@ export async function GET(
 
     if (!id) {
       return NextResponse.json(
-        { error: "Project ID is required" },
+        { error: "Task ID is required" },
         { status: 400 }
       );
     }
 
-    const docRef = doc(db, COLLECTION_NAME.PROJECT_LIST, id);
+    const docRef = doc(db, COLLECTION_NAME.TASK_LIST, id);
     const docSnap = await getDoc(docRef);
 
     return NextResponse.json(
@@ -26,10 +35,10 @@ export async function GET(
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Get project by project ID failed:", error.message);
+    console.error("Get task by task ID failed:", error.message);
 
     return NextResponse.json(
-      { error: "Get project by project ID failed" },
+      { error: "Get task by task ID failed" },
       { status: 500 }
     );
   }

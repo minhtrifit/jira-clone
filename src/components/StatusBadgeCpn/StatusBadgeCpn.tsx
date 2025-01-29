@@ -1,7 +1,9 @@
 import { Badge } from "@/components/ui/badge";
+import { STATUS_TYPE_LIST } from "@/lib/utils";
 
 interface PropType {
-  value: "backlog" | "todo" | "inprogress" | "inreview" | "done";
+  // value: "backlog" | "todo" | "inprogress" | "inreview" | "done";
+  value: STATUS_TYPE_LIST;
 }
 
 const StatusBadgeCpn = (props: PropType) => {
@@ -41,6 +43,12 @@ const StatusBadgeCpn = (props: PropType) => {
         Done
       </Badge>
     );
+
+  return (
+    <Badge className="text-white bg-red-500 hover:bg-red-400 hover:cursor-pointer">
+      Invalid status
+    </Badge>
+  );
 };
 
 export default StatusBadgeCpn;

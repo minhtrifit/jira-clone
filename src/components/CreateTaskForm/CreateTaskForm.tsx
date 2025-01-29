@@ -62,6 +62,7 @@ const CreateTaskForm = (props: PropType) => {
     loading,
     projects,
     getTasksByWorkspaceId,
+    getTaskByTaskId,
     createTask,
     updateTaskById,
   }: TaskStoreState = useTaskStore();
@@ -214,6 +215,8 @@ const CreateTaskForm = (props: PropType) => {
 
         const updateResult = await updateTaskById(updateTask);
         console.log("Update task:", updateResult);
+
+        if (updateResult?.id) await getTaskByTaskId(updateResult?.id);
       }
 
       await getTasksByWorkspaceId(workspace?.id);

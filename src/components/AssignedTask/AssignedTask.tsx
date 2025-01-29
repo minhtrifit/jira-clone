@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../providers/AuthProvider";
 import { Calendar, Plus } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
@@ -20,6 +21,8 @@ const AssignedTask = () => {
   const { workspace }: WorkspaceStoreState = useWorkspaceStore();
   const { tasks }: TaskStoreState = useTaskStore();
 
+  const router = useRouter();
+
   const [openCreateTaskForm, setOpenTaskForm] = useState<boolean>(false);
   const [assignedTasks, setAssignedTasks] = useState<TASK_TYPE[]>([]);
 
@@ -28,6 +31,10 @@ const AssignedTask = () => {
     tasks: TASK_TYPE[] = []
   ) => {
     return tasks?.filter((task) => task?.assigneeId === userId);
+  };
+
+  const handleViewDetailTask = (workspaceId: string, taskId: string) => {
+    router.push(`/workspace/${workspaceId}/tasks/${taskId}`);
   };
 
   useEffect(() => {
@@ -63,7 +70,14 @@ const AssignedTask = () => {
           {assignedTasks?.map((task: TASK_TYPE, index: number) => {
             if (index < 3) {
               return (
-                <Card key={uuidv4()}>
+                <Card
+                  className="hover:bg-zinc-50 dark:hover:bg-slate-900 hover:cursor-pointer"
+                  key={uuidv4()}
+                  onClick={() => {
+                    if (task?.workspaceId && task?.id)
+                      handleViewDetailTask(task?.workspaceId, task?.id);
+                  }}
+                >
                   <CardHeader className="pt-3 pb-3 font-bold">
                     {task?.name}
                   </CardHeader>

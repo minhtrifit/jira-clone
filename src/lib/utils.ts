@@ -110,6 +110,13 @@ export function convertDateStrToTimestamp(dateString: string): Timestamp {
   return Timestamp.fromDate(date);
 }
 
+export type STATUS_TYPE_LIST =
+  | "backlog"
+  | "todo"
+  | "inprogress"
+  | "inreview"
+  | "done";
+
 export const STATUS_LIST = [
   {
     id: "backlog",
