@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jira Clone",
+  title: `${process.env.NEXT_PUBLIC_APP_NAME ?? "Jira clone"}`,
   description: "Developed by minhtrifit",
 };
 

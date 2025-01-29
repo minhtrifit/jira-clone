@@ -71,7 +71,7 @@ const AssignedTask = () => {
             if (index < 3) {
               return (
                 <Card
-                  className="hover:bg-zinc-50 dark:hover:bg-slate-900 hover:cursor-pointer"
+                  className="hover:bg-zinc-50 dark:hover:bg-accent hover:cursor-pointer"
                   key={uuidv4()}
                   onClick={() => {
                     if (task?.workspaceId && task?.id)

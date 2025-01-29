@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Jira Clone | My Tasks",
+  title: `${process.env.NEXT_PUBLIC_APP_NAME ?? "Jira clone"} | My Tasks`,
   description: "Developed by minhtrifit",
 };
 

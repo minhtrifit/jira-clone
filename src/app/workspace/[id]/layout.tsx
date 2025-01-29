@@ -3,6 +3,11 @@ import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
 import { AppSidebar } from "@/components/Slidebar/AppSlidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
+export const metadata: Metadata = {
+  title: `${process.env.NEXT_PUBLIC_APP_NAME ?? "Jira clone"} | My Workspace`,
+  description: "Developed by minhtrifit",
+};
+
 export default function Layout({
   children,
 }: Readonly<{

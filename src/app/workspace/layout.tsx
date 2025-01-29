@@ -2,7 +2,7 @@ import AuthProtectProvider from "@/components/providers/AuthProtectProvider";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Jira Clone | Workspace",
+  title: `${process.env.NEXT_PUBLIC_APP_NAME ?? "Jira clone"} | Workspaces`,
   description: "Developed by minhtrifit",
 };
 

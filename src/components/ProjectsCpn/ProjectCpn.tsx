@@ -47,7 +47,7 @@ const ProjectCpn = () => {
                 key={uuidv4()}
                 href={`/workspace/${workspace?.id}/project/${project?.id}`}
               >
-                <Card className="rounded-md">
+                <Card className="rounded-md hover:bg-zinc-100 dark:hover:bg-slate-900">
                   <CardContent className="py-3 px-5">
                     <div className="flex items-center gap-5">
                       <Avatar className="rounded-md">

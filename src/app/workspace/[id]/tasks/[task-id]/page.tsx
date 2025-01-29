@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/components/providers/AuthProvider";
 import useTaskStore, { TaskStoreState } from "@/store/task";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
@@ -22,6 +23,13 @@ import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
 import { TASK_TYPE } from "@/types";
 import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const DetailTaskPage = () => {
   const { user }: any = useAuth();
@@ -108,7 +116,34 @@ const DetailTaskPage = () => {
           />
 
           <div className="w-full flex items-center justify-between mb-8">
-            <div>Title</div>
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_API_URL}/workspace/${task?.workspaceId}/project/${task?.projectId}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-6 w-6 rounded-md">
+                        <AvatarImage
+                          src={task?.project?.avatarUrl}
+                          alt={task?.project?.name}
+                        />
+                        <AvatarFallback className="rounded-md bg-primary text-white text-[0.7rem]">
+                          {task?.project?.name
+                            ? getFirstLetterUppercase(task?.project?.name)
+                            : "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span>{task?.project?.name}</span>
+                    </div>
+                  </Link>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{task?.name}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
 
             <div className="flex items-center gap-3">
               <ButtonCpn
