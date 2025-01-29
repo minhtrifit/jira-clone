@@ -42,6 +42,7 @@ import {
 } from "@/lib/utils";
 import { DateTimePicker } from "../DateTimePicker/DateTimePicker";
 import { Timestamp } from "firebase/firestore";
+import ColumnIcon from "../KanbanCpn/ColumnIcon";
 
 interface PropType {
   children: React.ReactNode;
@@ -389,7 +390,10 @@ const CreateTaskForm = (props: PropType) => {
                       (status: { id: string; title: string }) => {
                         return (
                           <SelectItem key={uuidv4()} value={status.id}>
-                            {status.title}
+                            <div className="flex items-center gap-2">
+                              <ColumnIcon value={status.id as any} />
+                              <span>{status.title}</span>
+                            </div>
                           </SelectItem>
                         );
                       }
