@@ -116,7 +116,7 @@ const CreateTaskForm = (props: PropType) => {
     if (taskForm.projectId === "") {
       taskFormErrObj = {
         ...taskFormErrObj,
-        projectId: "Project at can not be empty",
+        projectId: "Project can not be empty",
       };
       isError = true;
     }

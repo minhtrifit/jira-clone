@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,11 @@ import { signIn } from "@/lib/firebase.auth";
 import { toast } from "react-toastify";
 import Link from "next/link";
 
+interface LOGIN_FORM_TYPE {
+  email: string;
+  password: string;
+}
+
 const LoginCpn = ({
   className,
   ...props
@@ -25,25 +30,58 @@ const LoginCpn = ({
   const { loading }: any = useAuth();
   const router = useRouter();
 
-  const [loginForm, setLoginForm] = useState<{
-    email: string;
-    password: string;
-  }>({
+  const [loginForm, setLoginForm] = useState<LOGIN_FORM_TYPE>({
     email: "",
     password: "",
   });
+  const [loginFormError, setLoginFormError] = useState<LOGIN_FORM_TYPE>({
+    email: "",
+    password: "",
+  });
+
+  const handleLoginFormError = (
+    loginForm: LOGIN_FORM_TYPE,
+    setLoginFormError: Dispatch<SetStateAction<LOGIN_FORM_TYPE>>
+  ) => {
+    let isError: boolean = false;
+    let loginFormErrObj: LOGIN_FORM_TYPE = {
+      email: "",
+      password: "",
+    };
+
+    if (loginForm.email === "") {
+      loginFormErrObj = { ...loginFormErrObj, email: "Email can not be empty" };
+      isError = true;
+    }
+
+    if (loginForm.password === "") {
+      loginFormErrObj = {
+        ...loginFormErrObj,
+        password: "Password can not be empty",
+      };
+      isError = true;
+    }
+
+    setLoginFormError(loginFormErrObj);
+    return isError;
+  };
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
 
-      if (loginForm.email && loginForm.password) {
-        await signIn(loginForm.email, loginForm.password);
-        router.push("/workspace");
-        toast.success("Login successfully!");
+      const isFormError: boolean = handleLoginFormError(
+        loginForm,
+        setLoginFormError
+      );
 
-        setLoginForm({ email: "", password: "" });
-      }
+      if (isFormError) return;
+
+      await signIn(loginForm.email, loginForm.password);
+      router.push("/workspace");
+      toast.success("Login successfully!");
+
+      setLoginForm({ email: "", password: "" });
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Email or password wrong!");
@@ -51,7 +89,7 @@ const LoginCpn = ({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-3", className)} {...props}>
       <div className="w-full flex items-center justify-center gap-1">
         <Image src="/logo.png" width={80} height={80} alt="app-logo" />
         <h1 className="font-bold text-[1.2rem] uppercase">
@@ -60,6 +98,7 @@ const LoginCpn = ({
             : "Jira Clone"}
         </h1>
       </div>
+
       <Card>
         <CardHeader>
           <CardDescription className="text-center">
@@ -79,13 +118,19 @@ const LoginCpn = ({
                   id="email"
                   type="email"
                   placeholder="user-demo@example.com"
-                  required
                   value={loginForm.email}
                   onChange={(e) => {
                     setLoginForm({ ...loginForm, email: e.target.value });
+                    setLoginFormError({ ...loginFormError, email: "" });
                   }}
                 />
+                {loginFormError.email && (
+                  <span className="text-[0.85rem] text-red-500">
+                    {loginFormError.email}
+                  </span>
+                )}
               </div>
+
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
@@ -93,12 +138,17 @@ const LoginCpn = ({
                 <Input
                   id="password"
                   type="password"
-                  required
                   value={loginForm.password}
                   onChange={(e) => {
                     setLoginForm({ ...loginForm, password: e.target.value });
+                    setLoginFormError({ ...loginFormError, password: "" });
                   }}
                 />
+                {loginFormError.password && (
+                  <span className="text-[0.85rem] text-red-500">
+                    {loginFormError.password}
+                  </span>
+                )}
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Loading..." : "Login"}
