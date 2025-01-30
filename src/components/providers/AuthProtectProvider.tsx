@@ -11,13 +11,13 @@ interface PropType {
 
 const AuthProtectProvider = (props: PropType) => {
   const { children } = props;
+
   const router = useRouter();
+
   const { user, loading }: any = useContext(AuthContext);
 
   useEffect(() => {
     if (!loading && !user) router.push("/");
-    if (!loading && user) router.push("/workspace");
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 

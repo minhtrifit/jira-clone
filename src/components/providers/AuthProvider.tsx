@@ -8,7 +8,7 @@ import React, {
   useContext,
 } from "react";
 import { onAuthChange } from "@/lib/firebase.auth";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface AuthContextType {
   user: any;
@@ -23,6 +23,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const router = useRouter();
+  const pathName = usePathname();
 
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,7 +41,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    if (user && !loading) router.push("/workspace");
+    if (!loading && user && pathName === "/") router.push("/workspace");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user && loading]);
 
