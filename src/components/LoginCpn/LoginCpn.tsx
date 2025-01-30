@@ -82,7 +82,7 @@ const LoginCpn = ({
 
       await signIn(loginForm.email, loginForm.password);
       router.push("/workspace");
-      // toast.success("Login successfully!");
+      toast.success("Login successfully!");
 
       setLoginForm({ email: "", password: "" });
       setLoading(false);
