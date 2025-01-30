@@ -9,12 +9,14 @@ import { create } from "zustand";
 
 export interface TaskStoreState {
   projects: PROJECT_TYPE[];
+  project: PROJECT_TYPE | null;
   tasks: TASK_TYPE[];
   task: TASK_TYPE | null;
   loading: boolean;
   error: unknown;
   setProjects: (projects: PROJECT_TYPE[]) => Promise<PROJECT_TYPE[]>;
   getProjectsByWorkspaceId: (workspaceId: string) => Promise<PROJECT_TYPE[]>;
+  getProjectByProjectId: (projectId: string) => Promise<PROJECT_TYPE | null>;
   createProject: (project: PROJECT_TYPE) => Promise<PROJECT_TYPE>;
   setTasks: (tasks: TASK_TYPE[]) => Promise<TASK_TYPE[]>;
   getTasksByWorkspaceId: (workspaceId: string) => Promise<TASK_TYPE[]>;
@@ -26,6 +28,7 @@ export interface TaskStoreState {
 
 const useTaskStore = create<TaskStoreState>((set, get) => ({
   projects: [],
+  project: null,
   tasks: [],
   task: null,
   loading: false,
@@ -76,6 +79,48 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       );
 
       set({ projects: data, loading: false });
+
+      return data;
+    } catch (error) {
+      set({ error: error, loading: false });
+    }
+  },
+
+  getProjectByProjectId: async (projectId: string) => {
+    set({ loading: true, error: null });
+    try {
+      // Get project by project ID
+      const res = await fetch(`/api/project/single/project-id/${projectId}`);
+
+      if (!res.ok) throw new Error("Failed to fetch project for task!");
+
+      const data = await res.json();
+
+      if (!data) {
+        set({ project: null, loading: false });
+        return null;
+      }
+
+      // Get workspace
+      const workspaceResponse = await fetch(
+        `/api/workspace/workspace-id/${data?.workspaceId}`
+      );
+
+      if (!workspaceResponse.ok)
+        throw new Error("Failed to fetch workspace for project!");
+
+      const workspace: WORKSPACE_TYPE = await workspaceResponse.json();
+      data.workspace = workspace;
+
+      // Get workspace owner
+      const ownerResponse = await fetch(`/api/users/${workspace?.ownerId}`);
+
+      if (!ownerResponse.ok) throw new Error("Failed to fetch user details!");
+
+      const owner: USER_TYPE = await ownerResponse.json();
+      data.workspace.owner = owner;
+
+      set({ project: data, loading: false });
 
       return data;
     } catch (error) {
