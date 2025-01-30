@@ -18,6 +18,8 @@ import { calculateDaysLeft } from "@/lib/utils";
 import { Timestamp } from "firebase/firestore";
 import { useParams } from "next/navigation";
 import WorkspaceJoinForm from "@/components/WorkspaceJoinForm/WorkspaceJoinForm";
+import TasksLineChart from "@/components/TasksLineChart/TaskLineChart";
+import TasksBarChart from "@/components/TasksBarChart/TasksBarChart";
 
 const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
   {
@@ -146,7 +148,12 @@ const DetailWorkspacePage = () => {
             })}
           </div>
 
-          <div className="w-full h-[420px] flex items-start gap-3 flex-wrap lg:flex-nowrap">
+          <div className="w-full flex items-center gap-3 flex-wrap lg:flex-nowrap">
+            <TasksLineChart />
+            <TasksBarChart />
+          </div>
+
+          <div className="mt-3 w-full h-[420px] flex items-start gap-3 flex-wrap lg:flex-nowrap">
             <AssignedTask />
 
             <div className="basis-full hidden h-full lg:flex flex-col gap-3">
@@ -155,12 +162,12 @@ const DetailWorkspacePage = () => {
             </div>
           </div>
 
-          <div className="mt-10 flex lg:hidden flex-col gap-3">
+          <div className="mt-3 flex lg:hidden flex-col gap-3">
             <WorkspaceJoinForm />
             <ProjectCpn />
           </div>
 
-          <div className="mt-3 w-full flex items-start gap-3 flex-wrap lg:flex-nowrap">
+          <div className="mt-3 w-full flex items-center gap-3 flex-wrap lg:flex-nowrap">
             <PeopleCpn />
             <div className="basis:auto lg:basis-full"></div>
           </div>

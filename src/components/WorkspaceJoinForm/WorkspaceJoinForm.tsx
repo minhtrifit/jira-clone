@@ -32,7 +32,7 @@ const WorkspaceJoinForm = () => {
   }, [workspace?.joinUrl]);
 
   return (
-    <Card className="basis-full rounded-sm">
+    <Card className="rounded-sm">
       <CardHeader>
         <CardTitle>Share this workspace</CardTitle>
         <CardDescription>

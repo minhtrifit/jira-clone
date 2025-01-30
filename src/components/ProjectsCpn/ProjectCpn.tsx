@@ -18,8 +18,8 @@ const ProjectCpn = () => {
   const { projects }: TaskStoreState = useTaskStore();
 
   return (
-    <Card className="px-4 w-full basis:auto lg:basis-full rounded-sm">
-      <CardHeader className="px-0 pt-4 pb-4">
+    <Card className="px-0 w-full basis:auto lg:basis-full rounded-sm">
+      <CardHeader className="px-4 pt-4 pb-4">
         <div className="flex items-center justify-between">
           <h1 className="text-[1.05rem] font-bold">
             Projects ({projects?.length})
@@ -33,7 +33,9 @@ const ProjectCpn = () => {
         </div>
       </CardHeader>
 
-      <CardContent className="px-0 pb-4 pt-4 border-t border-dashed border-zinc-300 dark:border-gray-600">
+      <div className="mx-4 border-t border-dashed border-zinc-300 dark:border-gray-600"></div>
+
+      <CardContent className="px-4 pb-4 pt-4">
         {projects?.length === 0 && (
           <div className="w-full">
             <Empty size={40} />
