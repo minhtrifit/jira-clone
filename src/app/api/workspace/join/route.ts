@@ -5,6 +5,9 @@ import {
   addDoc,
   serverTimestamp,
   Timestamp,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import { JOIN_WORKSPACE_TYPE } from "@/types";
 import { COLLECTION_NAME } from "@/lib/utils";
@@ -31,6 +34,21 @@ export async function POST(req: Request) {
       db,
       COLLECTION_NAME.WORKSPACE_JOIN_LIST
     );
+
+    // Check if user already join
+    const q = query(
+      joinWorkspaceRef,
+      where("workspaceId", "==", body.workspaceId),
+      where("userId", "==", body.userId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      return NextResponse.json(
+        { error: "User has already joined this workspace" },
+        { status: 400 }
+      );
+    }
 
     const newJoinWorkspace: JOIN_WORKSPACE_TYPE = {
       workspaceId: body.workspaceId,

@@ -59,7 +59,7 @@ export function NavUser(props: PropType) {
                 <AvatarFallback className="rounded-lg bg-primary text-white">
                   {user?.displayName
                     ? getFirstLetterUppercase(user?.displayName)
-                    : "unknow"}
+                    : "U"}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">

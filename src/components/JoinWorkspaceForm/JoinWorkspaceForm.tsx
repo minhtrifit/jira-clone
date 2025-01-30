@@ -53,6 +53,11 @@ const JoinWorkspaceForm = () => {
         const joinResult = await createJoinWorkspace(newJoinWorkspace);
         console.log("Create join workspace:", joinResult);
 
+        if (!joinResult) {
+          toast.error("Join workspace failed");
+          return;
+        }
+
         await getWorkspaces(user?.uid);
 
         toast.success("Join workspace successfully");

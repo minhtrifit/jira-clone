@@ -104,7 +104,7 @@ const LoginCpn = ({
         </h1>
       </div>
 
-      <Card>
+      <Card className="dark:bg-slate-900 rounded-md">
         <CardHeader>
           <CardDescription className="text-center">
             Log in to your account
@@ -155,11 +155,15 @@ const LoginCpn = ({
                   </span>
                 )}
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button
+                type="submit"
+                className="w-full text-white"
+                disabled={loading}
+              >
                 {loading ? "Loading..." : "Login"}
               </Button>
               <div className="relative text-center text-[0.7rem] after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                <span className="relative z-10 dark:bg-slate-900 px-2 text-muted-foreground">
                   OR
                 </span>
               </div>

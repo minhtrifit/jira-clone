@@ -7,7 +7,7 @@ export default function Home() {
       <nav className="absolute w-full flex items-center justify-end top-6 px-6">
         <ModeToggle />
       </nav>
-      <div className="w-full max-w-sm">
+      <div className="w-[460px]">
         <RegisterCpn />
       </div>
     </div>

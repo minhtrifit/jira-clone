@@ -43,7 +43,7 @@ const AssignedTask = () => {
   }, [user?.uid, tasks]);
 
   return (
-    <Card className="px-4 w-full basis:auto lg:basis-full rounded-sm bg-zinc-100 dark:bg-gray-900">
+    <Card className="relative px-4 w-full h-full flex flex-col justify-start basis:auto lg:basis-full rounded-sm bg-zinc-100 dark:bg-gray-900">
       <CardHeader className="px-0 pt-4 pb-4">
         <div className="flex items-center justify-between">
           <h1 className="text-[1.05rem] font-bold">
@@ -65,7 +65,11 @@ const AssignedTask = () => {
       </CardHeader>
       <CardContent className="px-0 pb-4 pt-4 border-t border-dashed border-zinc-300 dark:border-gray-600">
         <div className="mb-5 flex flex-col gap-2">
-          {assignedTasks?.length === 0 && <Empty size={40} />}
+          {assignedTasks?.length === 0 && (
+            <div className="mt-10">
+              <Empty size={40} />
+            </div>
+          )}
 
           {assignedTasks?.map((task: TASK_TYPE, index: number) => {
             if (index < 3) {
@@ -97,7 +101,10 @@ const AssignedTask = () => {
           })}
         </div>
 
-        <Link href={`/workspace/${workspace?.id}/tasks`}>
+        <Link
+          className="w-[95%] absolute bottom-4 left-1/2 transform -translate-x-1/2"
+          href={`/workspace/${workspace?.id}/tasks`}
+        >
           <Button className="w-full text-white font-bold">Show All</Button>
         </Link>
       </CardContent>

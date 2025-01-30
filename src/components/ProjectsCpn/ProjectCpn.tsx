@@ -41,45 +41,47 @@ const ProjectCpn = () => {
         )}
 
         <div className="grid grid-cols-2 gap-4">
-          {projects?.map((project: PROJECT_TYPE) => {
-            return (
-              <Link
-                key={uuidv4()}
-                href={`/workspace/${workspace?.id}/project/${project?.id}`}
-              >
-                <Card className="rounded-md hover:bg-zinc-100 dark:hover:bg-slate-900">
-                  <CardContent className="py-3 px-5">
-                    <div className="flex items-center gap-5">
-                      <Avatar className="rounded-md">
-                        <AvatarImage
-                          src={"project avatar url"}
-                          alt={"project name"}
-                        />
-                        <AvatarFallback className="rounded-md bg-primary text-white text-[0.9rem] font-bold">
-                          {project?.name
-                            ? getFirstLetterUppercase(project?.name)
-                            : "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col gap-1">
-                        <h1 className="text-[0.8rem] font-bold max-w-[250px] truncate">
-                          {project?.name}
-                        </h1>
-                        <span className="flex items-center gap-1 text-[0.8rem] text-gray-400">
-                          Started at:{" "}
-                          {project?.createdAt
-                            ? formatTimeStampDate(
-                                project?.createdAt as Timestamp,
-                                "date"
-                              )
-                            : "unknow"}
-                        </span>
+          {projects?.map((project: PROJECT_TYPE, index: number) => {
+            if (index < 4) {
+              return (
+                <Link
+                  key={uuidv4()}
+                  href={`/workspace/${workspace?.id}/project/${project?.id}`}
+                >
+                  <Card className="rounded-md hover:bg-zinc-100 dark:hover:bg-slate-900">
+                    <CardContent className="py-3 px-5">
+                      <div className="flex items-center gap-5">
+                        <Avatar className="rounded-md">
+                          <AvatarImage
+                            src={"project avatar url"}
+                            alt={"project name"}
+                          />
+                          <AvatarFallback className="rounded-md bg-primary text-white text-[0.9rem] font-bold">
+                            {project?.name
+                              ? getFirstLetterUppercase(project?.name)
+                              : "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col gap-1">
+                          <h1 className="text-[0.8rem] font-bold max-w-[250px] truncate">
+                            {project?.name}
+                          </h1>
+                          <span className="max-w-[90px] xl:max-w-[150px] truncate flex items-center gap-1 text-[0.8rem] text-gray-400">
+                            Started at:{" "}
+                            {project?.createdAt
+                              ? formatTimeStampDate(
+                                  project?.createdAt as Timestamp,
+                                  "date"
+                                )
+                              : "unknow"}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            }
           })}
         </div>
       </CardContent>

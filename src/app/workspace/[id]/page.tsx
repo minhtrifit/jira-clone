@@ -17,6 +17,7 @@ import { TASK_TYPE } from "@/types";
 import { calculateDaysLeft } from "@/lib/utils";
 import { Timestamp } from "firebase/firestore";
 import { useParams } from "next/navigation";
+import WorkspaceJoinForm from "@/components/WorkspaceJoinForm/WorkspaceJoinForm";
 
 const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
   {
@@ -145,14 +146,23 @@ const DetailWorkspacePage = () => {
             })}
           </div>
 
-          <div className="w-full flex items-start gap-3 flex-wrap lg:flex-nowrap">
+          <div className="w-full h-[420px] flex items-start gap-3 flex-wrap lg:flex-nowrap">
             <AssignedTask />
+
+            <div className="basis-full hidden h-full lg:flex flex-col gap-3">
+              <WorkspaceJoinForm />
+              <ProjectCpn />
+            </div>
+          </div>
+
+          <div className="mt-10 flex lg:hidden flex-col gap-3">
+            <WorkspaceJoinForm />
             <ProjectCpn />
           </div>
 
-          <div className="mt-10 w-full flex items-start gap-3 flex-wrap lg:flex-nowrap">
+          <div className="mt-3 w-full flex items-start gap-3 flex-wrap lg:flex-nowrap">
             <PeopleCpn />
-            <div className="px-5 basis:auto lg:basis-full"></div>
+            <div className="basis:auto lg:basis-full"></div>
           </div>
         </div>
       )}

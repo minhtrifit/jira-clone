@@ -118,7 +118,7 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
       set({ loading: false });
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
       set({ error: error, loading: false });
     }
   },

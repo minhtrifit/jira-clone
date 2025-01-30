@@ -156,7 +156,7 @@ const RegisterCpn = ({
             : "Jira Clone"}
         </h1>
       </div>
-      <Card>
+      <Card className="dark:bg-slate-900 rounded-md">
         <CardHeader>
           <CardDescription className="text-center">
             Sign up new account
@@ -266,7 +266,11 @@ const RegisterCpn = ({
                   </span>
                 )}
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button
+                type="submit"
+                className="w-full text-white"
+                disabled={loading}
+              >
                 {loading ? "Loading..." : "Register"}
               </Button>
             </div>
