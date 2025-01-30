@@ -17,7 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { SLIDEBAR_ITEM_TYPE } from "@/types";
 
@@ -29,6 +29,10 @@ export function NavMain(props: PropType) {
   const { items } = props;
 
   const pathname = usePathname();
+  const params = useParams();
+
+  const workspaceId = params?.id;
+  const taskId = params?.["task-id"];
 
   return (
     <SidebarGroup>
@@ -41,6 +45,10 @@ export function NavMain(props: PropType) {
                   asChild
                   className={`${
                     pathname === item?.url &&
+                    "text-white bg-primary hover:text-white hover:bg-primary/90"
+                  } ${
+                    item.title === "My Tasks" &&
+                    pathname === `/workspace/${workspaceId}/tasks/${taskId}` &&
                     "text-white bg-primary hover:text-white hover:bg-primary/90"
                   }`}
                 >

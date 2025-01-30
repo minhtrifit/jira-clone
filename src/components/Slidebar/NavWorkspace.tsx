@@ -93,12 +93,19 @@ export function WorkspaceSwitcher() {
     <SidebarMenu>
       {state === "expanded" && (
         <SidebarMenuItem className="px-2 pt-1 flex items-center">
-          <Image src="/logo.png" width={80} height={80} alt="app-logo" />
-          <h1 className="text-[1.2rem] font-bold text-primary">
-            {process.env.NEXT_PUBLIC_APP_NAME
-              ? process.env.NEXT_PUBLIC_APP_NAME
-              : "Jira Clone"}
-          </h1>
+          <div
+            className="flex items-center"
+            onClick={() => {
+              if (workspaceId) handleChangeWorkspace(workspaceId as string);
+            }}
+          >
+            <Image src="/logo.png" width={80} height={80} alt="app-logo" />
+            <h1 className="max-w-[160px] truncate text-[1.2rem] font-bold text-primary hover:cursor-pointer">
+              {process.env.NEXT_PUBLIC_APP_NAME
+                ? process.env.NEXT_PUBLIC_APP_NAME
+                : "Jira Clone"}
+            </h1>
+          </div>
         </SidebarMenuItem>
       )}
 
