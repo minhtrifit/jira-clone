@@ -18,11 +18,11 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 const chartData = [
-  { month: "January", desktop: 186 },
+  { month: "January", desktop: 100 },
   { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
+  { month: "March", desktop: 180 },
   { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
+  { month: "May", desktop: 400 },
   { month: "June", desktop: 214 },
 ];
 
@@ -35,7 +35,7 @@ const chartConfig = {
 
 const TasksBarChart = () => {
   return (
-    <Card className="basis:auto lg:basis-full rounded-sm">
+    <Card className="w-full h-full basis:auto lg:basis-full rounded-sm">
       <CardHeader>
         <CardTitle>Work Productivity</CardTitle>
         <CardDescription>January - June 2025</CardDescription>

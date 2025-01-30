@@ -39,7 +39,7 @@ const chartConfig = {
 
 const TasksLineChart = () => {
   return (
-    <Card className="basis-full rounded-sm">
+    <Card className="w-full h-full basis-full rounded-sm">
       <CardHeader>
         <CardTitle>Completion Ability</CardTitle>
         <CardDescription>January - June 2025</CardDescription>

@@ -20,6 +20,7 @@ import { useParams } from "next/navigation";
 import WorkspaceJoinForm from "@/components/WorkspaceJoinForm/WorkspaceJoinForm";
 import TasksLineChart from "@/components/TasksLineChart/TaskLineChart";
 import TasksBarChart from "@/components/TasksBarChart/TasksBarChart";
+import TasksAreaChart from "@/components/TasksAreaChart/TasksAreaChart";
 
 const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
   {
@@ -148,9 +149,10 @@ const DetailWorkspacePage = () => {
             })}
           </div>
 
-          <div className="w-full flex items-center gap-3 flex-wrap lg:flex-nowrap">
-            <TasksLineChart />
+          <div className="w-full flex items-start gap-3 flex-wrap lg:flex-nowrap">
             <TasksBarChart />
+            <TasksAreaChart />
+            <TasksLineChart />
           </div>
 
           <div className="mt-3 w-full h-[420px] flex items-start gap-3 flex-wrap lg:flex-nowrap">
