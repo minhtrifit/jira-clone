@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import Link from "next/link";
 import { Folder, Forward, MoreHorizontal, Plus, Trash2 } from "lucide-react";
@@ -32,6 +32,8 @@ interface PropType {
 export function NavProjects(props: PropType) {
   const { items } = props;
 
+  const pathname = usePathname();
+
   const { workspace }: WorkspaceStoreState = useWorkspaceStore();
 
   const { isMobile } = useSidebar();
@@ -56,14 +58,26 @@ export function NavProjects(props: PropType) {
           if (index < 3) {
             return (
               <SidebarMenuItem key={item.title} className="my-1">
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton
+                  asChild
+                  className={`${
+                    pathname === item.url &&
+                    "text-white bg-primary hover:text-white hover:bg-primary/90"
+                  }`}
+                >
                   <Link href={item.url}>
                     <Avatar className="h-6 w-6 rounded-md">
                       <AvatarImage
                         src={item?.icon as string}
                         alt={item?.title}
                       />
-                      <AvatarFallback className="rounded-md bg-primary text-white text-[0.7rem]">
+                      <AvatarFallback
+                        className={`rounded-md text-white text-[0.7rem] ${
+                          pathname === item.url
+                            ? "text-gray-500 bg-zinc-50 dark:text-white dark:bg-slate-700"
+                            : "bg-primary"
+                        }`}
+                      >
                         {item?.title
                           ? getFirstLetterUppercase(item?.title)
                           : "U"}
@@ -75,8 +89,16 @@ export function NavProjects(props: PropType) {
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <SidebarMenuAction showOnHover>
-                      <MoreHorizontal />
+                    <SidebarMenuAction
+                      showOnHover
+                      className={`${
+                        pathname === item.url &&
+                        "hover:bg-blue-500 dark:hover:bg-blue-600"
+                      }`}
+                    >
+                      <MoreHorizontal
+                        className={`${pathname === item.url && "text-white"}`}
+                      />
                       <span className="sr-only">More</span>
                     </SidebarMenuAction>
                   </DropdownMenuTrigger>
