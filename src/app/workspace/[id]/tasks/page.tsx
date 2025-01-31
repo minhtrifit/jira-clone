@@ -14,6 +14,7 @@ import KanbanCpn from "@/components/KanbanCpn/KanbanCpn";
 import CalendarCpn from "@/components/CalendarCpn/CalendarCpn";
 import CreateTaskForm from "@/components/CreateTaskForm/CreateTaskForm";
 import { SkeletonCard } from "@/components/SkeletonCard/SkeletonCard";
+import TasksPdfViewer from "@/components/TasksPdf/TasksPdfViewer";
 
 const TAB_CONTENT_LIST = ["Table", "Kanban", "Calendar"];
 
@@ -60,19 +61,23 @@ const MyTasksPage = () => {
                 })}
               </TabsList>
 
-              <CreateTaskForm
-                isEdit={false}
-                open={openCreateTaskForm}
-                setOpen={setOpenCreateTaskForm}
-                initValue={null}
-              >
-                <ButtonCpn
-                  type="button"
-                  title="New"
-                  icon={<Plus />}
-                  onClick={() => {}}
-                />
-              </CreateTaskForm>
+              <div className="flex items-center gap-3">
+                <TasksPdfViewer />
+
+                <CreateTaskForm
+                  isEdit={false}
+                  open={openCreateTaskForm}
+                  setOpen={setOpenCreateTaskForm}
+                  initValue={null}
+                >
+                  <ButtonCpn
+                    type="button"
+                    title="New"
+                    icon={<Plus />}
+                    onClick={() => {}}
+                  />
+                </CreateTaskForm>
+              </div>
             </div>
           </CardHeader>
 

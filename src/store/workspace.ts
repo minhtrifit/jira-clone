@@ -168,6 +168,14 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
         );
       }
 
+      // Get workspace owner
+      const ownerResponse = await fetch(`/api/users/${data?.ownerId}`);
+
+      if (!ownerResponse.ok) throw new Error("Failed to fetch user details!");
+
+      const owner: USER_TYPE = await ownerResponse.json();
+      data.owner = owner;
+
       set({ workspace: data, loading: false });
 
       return data;
