@@ -13,7 +13,7 @@ const ButtonCpn = (props: PropType) => {
 
   return (
     <Button className="dark:text-white" onClick={onClick} disabled={loading}>
-      {icon && icon}
+      {icon && !loading && icon}
       {loading ? "Loading..." : title}
     </Button>
   );
