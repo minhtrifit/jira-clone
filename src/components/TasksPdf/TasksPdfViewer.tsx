@@ -20,7 +20,7 @@ const TasksPdfViewer = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary" disabled={loading}>
+        <Button variant="secondary" disabled={tasks?.length === 0 || loading}>
           <FileText size={15} /> Export PDF
         </Button>
       </DialogTrigger>

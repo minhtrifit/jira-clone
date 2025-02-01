@@ -47,7 +47,7 @@ const TasksCsv = (props: PropType) => {
 
   return (
     <CSVLink data={csvData} filename={FILE_NAME}>
-      <Button variant="secondary" disabled={loading}>
+      <Button variant="secondary" disabled={tasks?.length === 0 || loading}>
         <Sheet size={15} /> Export CSV
       </Button>
     </CSVLink>
