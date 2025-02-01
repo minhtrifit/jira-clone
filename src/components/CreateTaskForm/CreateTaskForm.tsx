@@ -30,9 +30,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "../providers/AuthProvider";
 import ButtonCpn from "../ButtonCpn/ButtonCpn";
-import { PROJECT_TYPE, TASK_TYPE, USER_TYPE } from "@/types";
+import { NOTIFICATION_TYPE, PROJECT_TYPE, TASK_TYPE, USER_TYPE } from "@/types";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import useTaskStore, { TaskStoreState } from "@/store/task";
+import useNotifcationStore, {
+  NotificationStoreState,
+} from "@/store/notifications";
 import {
   convertTimestampToDate,
   formatDateForFirestore,
@@ -66,6 +69,10 @@ const CreateTaskForm = (props: PropType) => {
     createTask,
     updateTaskById,
   }: TaskStoreState = useTaskStore();
+  const {
+    getNotificationsByReceiverId,
+    createNotification,
+  }: NotificationStoreState = useNotifcationStore();
 
   const [dueDate, setDueDate] = useState<Date>();
   const [taskForm, setTaskForm] = useState<TASK_TYPE>({
@@ -181,6 +188,7 @@ const CreateTaskForm = (props: PropType) => {
         return;
 
       if (!isEdit) {
+        // Create new task
         const newTask: TASK_TYPE = {
           name: taskForm.name,
           description: taskForm.description,
@@ -194,6 +202,24 @@ const CreateTaskForm = (props: PropType) => {
 
         const createResult = await createTask(newTask);
         console.log("Create new task:", createResult);
+
+        // Create new notification
+        if (createResult?.createdUser) {
+          const newNotification: NOTIFICATION_TYPE = {
+            name: `${
+              createResult?.assigneeId === createResult?.createdBy
+                ? "You have a new task!"
+                : `${createResult?.createdUser?.displayName} assign a new task for you`
+            }`,
+            url: `/workspace/${createResult?.workspaceId}/tasks/${createResult?.id}`,
+            senderId: `${createResult?.createdUser?.uid}`,
+            receiverId: `${createResult?.assigneeId}`,
+            isSeen: false,
+          };
+
+          const createNotiResult = await createNotification(newNotification);
+          console.log("Create new notification:", createNotiResult);
+        }
       }
 
       if (isEdit && initValue && user?.uid !== initValue?.createdBy) {

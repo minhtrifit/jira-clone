@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
 import { AppSidebar } from "@/components/Slidebar/AppSlidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import NotificationBtn from "@/components/NotificationBtn/NotificationBtn";
 
 export const metadata: Metadata = {
   title: `${process.env.NEXT_PUBLIC_APP_NAME ?? "Jira clone"} | My Workspace`,
@@ -20,7 +21,11 @@ export default function Layout({
         <div className="w-full p-5 mt-0 mb-[43.19px]">
           <div className="mb-5 flex items-center justify-between gap-3">
             <SidebarTrigger />
-            <ModeToggle />
+
+            <div className="flex items-center gap-3">
+              <NotificationBtn />
+              <ModeToggle />
+            </div>
           </div>
           {children}
         </div>

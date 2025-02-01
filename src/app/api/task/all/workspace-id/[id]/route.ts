@@ -34,10 +34,10 @@ export async function GET(
 
     return NextResponse.json(tasks, { status: 200 });
   } catch (error: any) {
-    console.error("Get tasks by workspace iD failed:", error.message);
+    console.error("Get tasks by workspace ID failed:", error.message);
 
     return NextResponse.json(
-      { error: "Get tasks by workspace iD failed" },
+      { error: "Get tasks by workspace ID failed" },
       { status: 500 }
     );
   }

@@ -75,3 +75,16 @@ export interface KANBAN_COLUMN_TYPE {
   name: string;
   count: number;
 }
+
+export interface NOTIFICATION_TYPE {
+  id?: string;
+  name?: string;
+  url?: string;
+  senderId?: string;
+  sender?: USER_TYPE;
+  receiverId?: string;
+  receiver?: USER_TYPE;
+  isSeen?: boolean;
+  createdAt?: string | Timestamp;
+  updatedAt?: string | Timestamp;
+}

@@ -279,6 +279,26 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
 
       const data = await res.json();
 
+      // Get assignee
+      const assigneeResponse = await fetch(`/api/users/${data?.assigneeId}`);
+
+      if (!assigneeResponse.ok)
+        throw new Error("Failed to fetch user details!");
+
+      const assignee: USER_TYPE = await assigneeResponse.json();
+
+      data.assignee = assignee;
+
+      // Get createdUser
+      const createdUserResponse = await fetch(`/api/users/${data?.createdBy}`);
+
+      if (!createdUserResponse.ok)
+        throw new Error("Failed to fetch user details!");
+
+      const createdUser: USER_TYPE = await createdUserResponse.json();
+
+      data.createdUser = createdUser;
+
       set({ loading: false });
 
       return data;

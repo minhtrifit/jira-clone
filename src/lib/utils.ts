@@ -1,8 +1,13 @@
 import { KANBAN_COLUMN_TYPE } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
 import { Timestamp } from "firebase/firestore";
 import { twMerge } from "tailwind-merge";
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,6 +27,10 @@ export const COLLECTION_NAME = {
   ["TASK_LIST"]: process.env.NEXT_PUBLIC_FIREBASE_TASK_COLLECTION
     ? process.env.NEXT_PUBLIC_FIREBASE_TASK_COLLECTION
     : "task-list",
+  ["NOTIFICATION_LIST"]: process.env
+    .NEXT_PUBLIC_FIREBASE_NOTIFICATION_COLLECTION
+    ? process.env.NEXT_PUBLIC_FIREBASE_NOTIFICATION_COLLECTION
+    : "notification-list",
 };
 
 export const getFirstLetterUppercase = (name: string) => {
@@ -109,6 +118,16 @@ export function convertDateStrToTimestamp(dateString: string): Timestamp {
   const date = new Date(dateString);
   return Timestamp.fromDate(date);
 }
+
+export const getTimeAgo = (datetime: string) => {
+  const date = dayjs(datetime, "DD/MM/YYYY HH:mm:ss", true).utc();
+
+  if (!date.isValid()) {
+    return "Invalid date format";
+  }
+
+  return date.fromNow();
+};
 
 export type STATUS_TYPE_LIST =
   | "backlog"

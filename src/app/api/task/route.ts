@@ -62,7 +62,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const projectRef = collection(db, COLLECTION_NAME.TASK_LIST);
+    const taskRef = collection(db, COLLECTION_NAME.TASK_LIST);
 
     const newTask: TASK_TYPE = {
       ...body,
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
       updatedAt: serverTimestamp() as Timestamp,
     };
 
-    const docRef = await addDoc(projectRef, newTask);
+    const docRef = await addDoc(taskRef, newTask);
 
     return NextResponse.json({ id: docRef.id, ...newTask }, { status: 201 });
   } catch (error: any) {
