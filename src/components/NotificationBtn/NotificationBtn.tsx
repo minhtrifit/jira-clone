@@ -116,63 +116,79 @@ const NotificationBtn = () => {
               </div>
             )}
 
-            {notifications?.length !== 0 &&
-              notifications?.map((notification: NOTIFICATION_TYPE) => {
-                return (
-                  <DropdownMenuItem key={notification?.id}>
-                    <Link
-                      href={notification?.url ?? "/workspace"}
-                      className="w-[380px] p-1"
-                      onMouseEnter={() => {
-                        handleUpdateIsSeenNotification(
-                          notifications,
-                          notification
-                        );
-                      }}
-                      onClick={() => {
-                        setOpen(false);
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-5">
-                          <Avatar className="h-10 w-10 rounded-md">
-                            <AvatarImage
-                              src={notification?.sender?.photoURL as string}
-                              alt={notification?.sender?.displayName}
-                            />
-                            <AvatarFallback
-                              className={`rounded-full text-white text-[0.9rem] bg-primary`}
-                            >
-                              {notification?.sender?.displayName
-                                ? getFirstLetterUppercase(
-                                    notification?.sender?.displayName
-                                  )
-                                : "U"}
-                            </AvatarFallback>
-                          </Avatar>
+            <div className="max-h-[250px] overflow-y-auto">
+              {notifications?.length !== 0 &&
+                notifications?.map(
+                  (notification: NOTIFICATION_TYPE, index: number) => {
+                    if (index < 10) {
+                      return (
+                        <DropdownMenuItem key={notification?.id}>
+                          <Link
+                            href={notification?.url ?? "/workspace"}
+                            className="w-[380px] p-1"
+                            onMouseEnter={() => {
+                              handleUpdateIsSeenNotification(
+                                notifications,
+                                notification
+                              );
+                            }}
+                            onClick={() => {
+                              setOpen(false);
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-5">
+                                <Avatar className="h-10 w-10 rounded-md">
+                                  <AvatarImage
+                                    src={
+                                      notification?.sender?.photoURL as string
+                                    }
+                                    alt={notification?.sender?.displayName}
+                                  />
+                                  <AvatarFallback
+                                    className={`rounded-full text-white text-[0.9rem] bg-primary`}
+                                  >
+                                    {notification?.sender?.displayName
+                                      ? getFirstLetterUppercase(
+                                          notification?.sender?.displayName
+                                        )
+                                      : "U"}
+                                  </AvatarFallback>
+                                </Avatar>
 
-                          <div className="flex flex-col gap-1">
-                            <span className="max-w-[250px] truncate text-[0.rem] font-semibold">
-                              {notification?.name}
-                            </span>
-                            <span className="text-[0.8rem] text-gray-500 dark:text-gray-400">
-                              {notification?.createdAt &&
-                                formatTimeStampDate(
-                                  notification?.createdAt as Timestamp,
-                                  "datetime"
-                                )}
-                            </span>
-                          </div>
-                        </div>
+                                <div className="flex flex-col gap-1">
+                                  <span className="max-w-[250px] truncate text-[0.rem] font-semibold">
+                                    {notification?.name}
+                                  </span>
+                                  <span className="text-[0.8rem] text-gray-500 dark:text-gray-400">
+                                    {notification?.createdAt &&
+                                      formatTimeStampDate(
+                                        notification?.createdAt as Timestamp,
+                                        "datetime"
+                                      )}
+                                  </span>
+                                </div>
+                              </div>
 
-                        {!notification?.isSeen && (
-                          <div className="w-[10px] h-[10px] rounded-full bg-primary"></div>
-                        )}
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                );
-              })}
+                              {!notification?.isSeen && (
+                                <div className="w-[10px] h-[10px] rounded-full bg-primary"></div>
+                              )}
+                            </div>
+                          </Link>
+                        </DropdownMenuItem>
+                      );
+                    }
+                  }
+                )}
+            </div>
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuGroup className="py-1 flex items-center justify-center">
+            <span className="text-primary text-center font-semibold text-[0.9rem] hover:cursor-pointer hover:underline">
+              See all recent activity
+            </span>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
