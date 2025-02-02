@@ -35,35 +35,35 @@ const CreateWorkspaceForm = () => {
   const handleCreateNewWorkSpace = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!user?.uid) return;
+
     try {
-      if (user?.uid) {
-        const joinUrl = `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/workspace/join/${uuidv4()}`;
+      const joinUrl = `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/workspace/join/${uuidv4()}`;
 
-        const newWorkspace: WORKSPACE_TYPE = {
-          ownerId: user?.uid,
-          name: workspaceForm.name,
-          joinUrl: joinUrl,
-        };
+      const newWorkspace: WORKSPACE_TYPE = {
+        ownerId: user?.uid,
+        name: workspaceForm.name,
+        joinUrl: joinUrl,
+      };
 
-        const createResult = await createWorkspace(newWorkspace);
-        console.log("Create new workspace:", createResult);
+      const createResult = await createWorkspace(newWorkspace);
+      console.log("Create new workspace:", createResult);
 
-        const newJoinWorkspace: JOIN_WORKSPACE_TYPE = {
-          workspaceId: createResult?.id,
-          userId: user?.uid,
-        };
+      const newJoinWorkspace: JOIN_WORKSPACE_TYPE = {
+        workspaceId: createResult?.id,
+        userId: user?.uid,
+      };
 
-        const joinResult = await createJoinWorkspace(newJoinWorkspace);
-        console.log("Create join workspace:", joinResult);
+      const joinResult = await createJoinWorkspace(newJoinWorkspace);
+      console.log("Create join workspace:", joinResult);
 
-        await getWorkspaces(user?.uid);
+      await getWorkspaces(user?.uid);
 
-        toast.success("Create workspace successfully");
-      }
-    } catch (error) {
-      toast.error("Create workspace failed");
+      toast.success("Create workspace successfully");
+    } catch (error: any) {
+      toast.error(error?.message ?? "Create workspace failed");
     } finally {
       setWorkspaceForm({ name: "" });
       setOpen(false);

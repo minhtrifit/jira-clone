@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import { SquareArrowOutUpRight } from "lucide-react";
 import { toast } from "react-toastify";
 import {
@@ -15,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "../providers/AuthProvider";
 import ButtonCpn from "../ButtonCpn/ButtonCpn";
 import { JOIN_WORKSPACE_TYPE, WORKSPACE_TYPE } from "@/types";
-import useWorkspaceStore from "@/store/workspace";
 
 const JoinWorkspaceForm = () => {
   const { user }: any = useAuth();
@@ -24,7 +24,7 @@ const JoinWorkspaceForm = () => {
     getWorkspaces,
     getWorkspaceByJoinUrl,
     loading,
-  }: any = useWorkspaceStore();
+  }: WorkspaceStoreState = useWorkspaceStore();
 
   const [open, setOpen] = useState<boolean>(false);
   const [joinWorkspaceForm, setJoinWorkspaceForm] = useState<WORKSPACE_TYPE>({
@@ -34,36 +34,26 @@ const JoinWorkspaceForm = () => {
   const handleJoinWorkspace = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!user?.uid || !joinWorkspaceForm?.joinUrl) return;
+
     try {
-      if (user?.uid) {
-        const workspace: WORKSPACE_TYPE = await getWorkspaceByJoinUrl(
-          joinWorkspaceForm?.joinUrl
-        );
+      const workspace: WORKSPACE_TYPE = await getWorkspaceByJoinUrl(
+        joinWorkspaceForm?.joinUrl
+      );
 
-        if (!workspace) {
-          toast.error("Workspace not found");
-          return;
-        }
+      const newJoinWorkspace: JOIN_WORKSPACE_TYPE = {
+        workspaceId: workspace?.id,
+        userId: user?.uid,
+      };
 
-        const newJoinWorkspace: JOIN_WORKSPACE_TYPE = {
-          workspaceId: workspace?.id,
-          userId: user?.uid,
-        };
+      const joinResult = await createJoinWorkspace(newJoinWorkspace);
+      console.log("Create join workspace:", joinResult);
 
-        const joinResult = await createJoinWorkspace(newJoinWorkspace);
-        console.log("Create join workspace:", joinResult);
+      await getWorkspaces(user?.uid);
 
-        if (!joinResult) {
-          toast.error("Join workspace failed");
-          return;
-        }
-
-        await getWorkspaces(user?.uid);
-
-        toast.success("Join workspace successfully");
-      }
-    } catch (error) {
-      toast.error("Join workspace failed");
+      toast.success("Join workspace successfully");
+    } catch (error: any) {
+      toast.error(error?.message ?? "Join workspace failed");
     } finally {
       setJoinWorkspaceForm({ joinUrl: "" });
       setOpen(false);

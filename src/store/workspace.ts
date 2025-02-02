@@ -37,7 +37,11 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
     try {
       // Get workspace by userId
       const res = await fetch(`/api/workspace/user/${userId}`);
-      if (!res.ok) throw new Error("Get workspace by userId failed!");
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData?.error ?? "Get workspace by userId failed!");
+      }
 
       const data = await res.json();
 
@@ -48,8 +52,13 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
             `/api/workspace/join/${workspace.id}`
           );
 
-          if (!joinResponse.ok)
-            throw new Error("Failed to fetch joined users for the workspace!");
+          if (!joinResponse.ok) {
+            const errData = await res.json();
+            throw new Error(
+              errData?.error ??
+                "Failed to fetch joined users for the workspace!"
+            );
+          }
 
           const joinData: JOIN_WORKSPACE_TYPE[] = await joinResponse.json();
 
@@ -57,8 +66,12 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
             joinData.map(async (join) => {
               const userResponse = await fetch(`/api/users/${join.userId}`);
 
-              if (!userResponse.ok)
-                throw new Error("Failed to fetch user details!");
+              if (!userResponse.ok) {
+                const errData = await res.json();
+                throw new Error(
+                  errData?.error ?? "Failed to fetch user details!"
+                );
+              }
 
               return userResponse.json() as Promise<USER_TYPE>;
             })
@@ -88,7 +101,10 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
         body: JSON.stringify(workspace),
       });
 
-      if (!response.ok) throw new Error("Create workspace failed!");
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData?.error ?? "Create workspace failed!");
+      }
 
       const data = await response.json();
 
@@ -97,6 +113,7 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
       return data;
     } catch (error) {
       set({ error: error, loading: false });
+      throw error;
     }
   },
 
@@ -111,15 +128,19 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
         body: JSON.stringify(joinWorkspace),
       });
 
-      if (!response.ok) throw new Error("Create join workspace failed!");
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData?.error ?? "Create join workspace failed!");
+      }
 
       const data = await response.json();
 
       set({ loading: false });
 
       return data;
-    } catch (error: any) {
+    } catch (error) {
       set({ error: error, loading: false });
+      throw error;
     }
   },
 
@@ -134,7 +155,10 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
         body: JSON.stringify({ joinUrl: joinUrl }),
       });
 
-      if (!response.ok) throw new Error("Get workspace by join URL failed!");
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData?.error ?? "Get workspace by join URL failed!");
+      }
 
       const data = await response.json();
 
@@ -143,6 +167,7 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
       return data;
     } catch (error) {
       set({ error: error, loading: false });
+      throw error;
     }
   },
 
@@ -150,7 +175,13 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const res = await fetch(`/api/workspace/workspace-id/${workspaceId}`);
-      if (!res.ok) throw new Error("Get workspace by workspace ID failed!");
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(
+          errData?.error ?? "Get workspace by workspace ID failed!"
+        );
+      }
 
       const data = await res.json();
 
@@ -160,8 +191,10 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
           data.joinUsers.map(async (joinUser: JOIN_WORKSPACE_TYPE) => {
             const userResponse = await fetch(`/api/users/${joinUser?.userId}`);
 
-            if (!userResponse.ok)
-              throw new Error("Failed to fetch user by ID!");
+            if (!userResponse.ok) {
+              const errData = await res.json();
+              throw new Error(errData?.error ?? "Failed to fetch user by ID!");
+            }
 
             return userResponse.json() as Promise<USER_TYPE>;
           })
@@ -171,7 +204,10 @@ const useWorkspaceStore = create<WorkspaceStoreState>((set, get) => ({
       // Get workspace owner
       const ownerResponse = await fetch(`/api/users/${data?.ownerId}`);
 
-      if (!ownerResponse.ok) throw new Error("Failed to fetch user details!");
+      if (!ownerResponse.ok) {
+        const errData = await res.json();
+        throw new Error(errData?.error ?? "Failed to fetch user details!");
+      }
 
       const owner: USER_TYPE = await ownerResponse.json();
       data.owner = owner;
