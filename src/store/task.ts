@@ -279,15 +279,20 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
         body: JSON.stringify(task),
       });
 
-      if (!res.ok) throw new Error("Create task failed!");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData?.error ?? "Create task failed!");
+      }
 
       const data = await res.json();
 
       // Get assignee
       const assigneeResponse = await fetch(`/api/users/${data?.assigneeId}`);
 
-      if (!assigneeResponse.ok)
-        throw new Error("Failed to fetch user details!");
+      if (!assigneeResponse.ok) {
+        const errData = await assigneeResponse.json();
+        throw new Error(errData?.error ?? "Failed to fetch user details!");
+      }
 
       const assignee: USER_TYPE = await assigneeResponse.json();
 
@@ -296,8 +301,10 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       // Get createdUser
       const createdUserResponse = await fetch(`/api/users/${data?.createdBy}`);
 
-      if (!createdUserResponse.ok)
-        throw new Error("Failed to fetch user details!");
+      if (!createdUserResponse.ok) {
+        const errData = await createdUserResponse.json();
+        throw new Error(errData?.error ?? "Failed to fetch user details!");
+      }
 
       const createdUser: USER_TYPE = await createdUserResponse.json();
 
@@ -308,6 +315,7 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       return data;
     } catch (error) {
       set({ error: error, loading: false });
+      throw error;
     }
   },
 
@@ -318,7 +326,10 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
         method: "DELETE",
       });
 
-      if (!res.ok) throw new Error("Delete task failed!");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData?.error ?? "Delete task failed!");
+      }
 
       const data = await res.json();
 
@@ -327,6 +338,7 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       return data;
     } catch (error) {
       set({ error: error, loading: false });
+      throw error;
     }
   },
 
@@ -341,7 +353,10 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
         body: JSON.stringify(task),
       });
 
-      if (!res.ok) throw new Error("Update task failed!");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData?.error ?? "Update task failed!");
+      }
 
       const data = await res.json();
 
@@ -350,6 +365,7 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       return data;
     } catch (error) {
       set({ error: error, loading: false });
+      throw error;
     }
   },
 }));

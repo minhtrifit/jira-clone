@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { ChevronLeft, ChevronRight, Clock2 } from "lucide-react";
 import dayjs from "dayjs";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
@@ -73,22 +74,26 @@ const CalendarCpn = () => {
       return task?.id === eventId;
     });
 
-    if (workspace?.id && targetTask && newDueDate) {
-      const updateTask: TASK_TYPE = {
-        id: targetTask?.id,
-        name: targetTask?.name,
-        description: targetTask?.description,
-        workspaceId: workspace?.id,
-        assigneeId: targetTask?.assigneeId,
-        projectId: targetTask?.projectId,
-        status: targetTask?.status,
-        dueAt: convertDateStrToTimestamp(newDueDate),
-      };
+    try {
+      if (workspace?.id && targetTask && newDueDate) {
+        const updateTask: TASK_TYPE = {
+          id: targetTask?.id,
+          name: targetTask?.name,
+          description: targetTask?.description,
+          workspaceId: workspace?.id,
+          assigneeId: targetTask?.assigneeId,
+          projectId: targetTask?.projectId,
+          status: targetTask?.status,
+          dueAt: convertDateStrToTimestamp(newDueDate),
+        };
 
-      const updateResult = await updateTaskById(updateTask);
-      console.log("Update task:", updateResult);
+        const updateResult = await updateTaskById(updateTask);
+        console.log("Update task:", updateResult);
 
-      await getTasksByWorkspaceId(workspace?.id);
+        await getTasksByWorkspaceId(workspace?.id);
+      }
+    } catch (error: any) {
+      toast.error(error?.message ?? "Update task failed");
     }
   };
 

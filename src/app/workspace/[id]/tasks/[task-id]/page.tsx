@@ -70,9 +70,9 @@ const DetailTaskPage = () => {
         toast.success("Delete task successfully");
         router.push(`/workspace/${workspace?.id}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log("Delete task failed:", error);
-      toast.error("Delete task failed");
+      toast.error(error?.message ?? "Delete task failed");
     }
   };
 

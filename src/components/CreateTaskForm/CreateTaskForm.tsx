@@ -177,16 +177,16 @@ const CreateTaskForm = (props: PropType) => {
 
     if (isFormError) return;
 
-    try {
-      if (
-        !user?.uid ||
-        user?.uid === "" ||
-        !workspace?.id ||
-        workspace?.id === "" ||
-        !dueDate
-      )
-        return;
+    if (
+      !user?.uid ||
+      user?.uid === "" ||
+      !workspace?.id ||
+      workspace?.id === "" ||
+      !dueDate
+    )
+      return;
 
+    try {
       if (!isEdit) {
         // Create new task
         const newTask: TASK_TYPE = {
@@ -248,8 +248,9 @@ const CreateTaskForm = (props: PropType) => {
       await getTasksByWorkspaceId(workspace?.id);
 
       toast.success(`${!isEdit ? "Create" : "Edit"} task successfully`);
-    } catch (error) {
-      toast.error(`${!isEdit ? "Create" : "Edit"} task failed`);
+    } catch (error: any) {
+      if (error?.message) toast.error(error?.message);
+      else toast.error(`${!isEdit ? "Create" : "Edit"} task failed`);
     } finally {
       setTaskForm({
         name: "",

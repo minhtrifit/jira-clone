@@ -39,7 +39,7 @@ const KanbanCpn = () => {
   const columns: KANBAN_COLUMN_TYPE[] = COLUMNS_DATA;
 
   useEffect(() => {
-    if (tasks?.length !== 0) setTaskList(tasks);
+    setTaskList(tasks);
   }, [tasks]);
 
   const sensors = useSensors(
@@ -105,25 +105,29 @@ const KanbanCpn = () => {
   const handleDragEnd = async ({ active, over }: DragEndEvent) => {
     // console.log(active, over);
 
-    if (workspace?.id && activeTask) {
-      const updateTask: TASK_TYPE = {
-        id: activeTask?.id,
-        name: activeTask?.name,
-        description: activeTask?.description,
-        workspaceId: workspace?.id,
-        assigneeId: activeTask?.assigneeId,
-        projectId: activeTask?.projectId,
-        status: activeTask?.status,
-        dueAt: activeTask?.dueAt,
-      };
+    try {
+      if (workspace?.id && activeTask) {
+        const updateTask: TASK_TYPE = {
+          id: activeTask?.id,
+          name: activeTask?.name,
+          description: activeTask?.description,
+          workspaceId: workspace?.id,
+          assigneeId: activeTask?.assigneeId,
+          projectId: activeTask?.projectId,
+          status: activeTask?.status,
+          dueAt: activeTask?.dueAt,
+        };
 
-      const updateResult = await updateTaskById(updateTask);
-      console.log("Update task:", updateResult);
+        const updateResult = await updateTaskById(updateTask);
+        console.log("Update task:", updateResult);
 
-      // await getTasksByWorkspaceId(workspace?.id);
+        // await getTasksByWorkspaceId(workspace?.id);
+      }
+    } catch (error: any) {
+      toast.error(error?.message ?? "Update task failed");
+    } finally {
+      setActiveTask(null);
     }
-
-    setActiveTask(null);
   };
 
   const task = activeTask ? activeTask : null;

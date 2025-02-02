@@ -80,11 +80,16 @@ const KTask = (props: PropType) => {
       return;
     }
 
-    if (workspace?.id && task?.id) {
-      await deleteTaskById(task?.id);
-      await getTasksByWorkspaceId(workspace?.id);
+    try {
+      if (workspace?.id && task?.id) {
+        await deleteTaskById(task?.id);
+        await getTasksByWorkspaceId(workspace?.id);
 
-      toast.success("Delete task successfully");
+        toast.success("Delete task successfully");
+      }
+    } catch (error: any) {
+      console.log("Delete task failed:", error);
+      toast.error(error?.message ?? "Delete task failed");
     }
   };
 
