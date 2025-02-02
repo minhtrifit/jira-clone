@@ -139,7 +139,10 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
         body: JSON.stringify(project),
       });
 
-      if (!res.ok) throw new Error("Create project failed!");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData?.error ?? "Create project failed!");
+      }
 
       const data = await res.json();
 
@@ -148,6 +151,7 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       return data;
     } catch (error) {
       set({ error: error, loading: false });
+      throw error;
     }
   },
 

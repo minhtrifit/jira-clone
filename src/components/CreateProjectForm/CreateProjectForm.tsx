@@ -38,22 +38,22 @@ const CreateProjectForm = (props: PropType) => {
   const handleCreateNewProject = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!user?.uid || !workspace?.id) return;
+
     try {
-      if (user?.uid && workspace?.id) {
-        const newProject: PROJECT_TYPE = {
-          name: projectForm.name,
-          workspaceId: workspace?.id,
-        };
+      const newProject: PROJECT_TYPE = {
+        name: projectForm.name,
+        workspaceId: workspace?.id,
+      };
 
-        const createResult = await createProject(newProject);
-        console.log("Create new project:", createResult);
+      const createResult = await createProject(newProject);
+      console.log("Create new project:", createResult);
 
-        await getProjectsByWorkspaceId(workspace?.id);
+      await getProjectsByWorkspaceId(workspace?.id);
 
-        toast.success("Create project successfully");
-      }
-    } catch (error) {
-      toast.error("Create project failed");
+      toast.success("Create project successfully");
+    } catch (error: any) {
+      toast.error(error?.message ?? "Create project failed");
     } finally {
       setProjectForm({ name: "" });
       setOpen(false);
