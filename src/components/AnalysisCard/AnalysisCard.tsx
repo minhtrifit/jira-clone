@@ -7,6 +7,7 @@ export interface ANALYSIS_TYPE {
   count: number;
   analysis: number;
   direction: "up" | "down";
+  icon: React.ReactNode;
 }
 
 interface PropType {
@@ -20,9 +21,13 @@ const AnalysisCard = (props: PropType) => {
     <Card className="w-full basis:auto lg:basis-full rounded-sm bg-zinc-50 dark:bg-slate-900">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span className="font-semibold text-gray-400 dark:text-gray-300">
-            {item?.title}
-          </span>
+          <div className="flex items-center gap-3">
+            {item?.icon}
+            <span className="text-[0.9125rem] font-semibold text-gray-500 dark:text-gray-300">
+              {item?.title}
+            </span>
+          </div>
+
           <div
             className={`flex items-center gap-1 ${
               item.direction === "up" ? "text-green-500" : "text-red-500"

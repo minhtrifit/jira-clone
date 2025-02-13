@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { ChevronsUpDown, Plus } from "lucide-react";
 import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import useTaskStore, { TaskStoreState } from "@/store/task";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,17 +21,17 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useParams, useRouter } from "next/navigation";
+import { LiteSkeletonCard } from "../LiteSkeletonCard/LiteSkeletonCard";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import { useAuth } from "../providers/AuthProvider";
 import { WORKSPACE_TYPE } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getFirstLetterUppercase } from "@/lib/utils";
-import useTaskStore, { TaskStoreState } from "@/store/task";
 
 export function WorkspaceSwitcher() {
   const { user }: any = useAuth();
   const {
+    loading,
     setJoinUsers,
     workspaces,
     getWorkspaces,
@@ -126,22 +128,26 @@ export function WorkspaceSwitcher() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
-                {workspace?.name
-                  ? getFirstLetterUppercase(workspace?.name)
-                  : "U"}
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {workspace?.name ? workspace?.name : "unknow"}
-                </span>
-              </div>
-              <ChevronsUpDown className="ml-auto" />
-            </SidebarMenuButton>
+            {loading ? (
+              <LiteSkeletonCard />
+            ) : (
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
+                  {workspace?.name
+                    ? getFirstLetterUppercase(workspace?.name)
+                    : "U"}
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">
+                    {workspace?.name ? workspace?.name : "unknow"}
+                  </span>
+                </div>
+                <ChevronsUpDown className="ml-auto" />
+              </SidebarMenuButton>
+            )}
           </DropdownMenuTrigger>
 
           <DropdownMenuContent

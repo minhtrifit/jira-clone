@@ -3,6 +3,13 @@
 import { useEffect, useMemo } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { v4 as uuidv4 } from "uuid";
+import {
+  FolderGit2,
+  FolderPen,
+  ClipboardList,
+  CircleCheckBig,
+  CircleEllipsis,
+} from "lucide-react";
 import useWorkspaceStore, { WorkspaceStoreState } from "@/store/workspace";
 import useTaskStore, { TaskStoreState } from "@/store/task";
 import AnalysisCard, {
@@ -29,6 +36,7 @@ const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
     count: 0,
     analysis: 10,
     direction: "up",
+    icon: <FolderGit2 className="text-gray-500 dark:text-gray-300" size={20} />,
   },
   {
     id: "totaltasks",
@@ -36,6 +44,7 @@ const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
     count: 0,
     analysis: 42,
     direction: "up",
+    icon: <FolderPen className="text-gray-500 dark:text-gray-300" size={20} />,
   },
   {
     id: "assignedtasks",
@@ -43,6 +52,9 @@ const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
     count: 0,
     analysis: 5,
     direction: "up",
+    icon: (
+      <ClipboardList className="text-gray-500 dark:text-gray-300" size={20} />
+    ),
   },
   {
     id: "completedtasks",
@@ -50,6 +62,9 @@ const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
     count: 0,
     analysis: 5,
     direction: "up",
+    icon: (
+      <CircleCheckBig className="text-gray-500 dark:text-gray-300" size={20} />
+    ),
   },
   {
     id: "overduetasks",
@@ -57,6 +72,9 @@ const ANALYSIS_ITEMS: ANALYSIS_TYPE[] = [
     count: 0,
     analysis: 0,
     direction: "down",
+    icon: (
+      <CircleEllipsis className="text-gray-500 dark:text-gray-300" size={20} />
+    ),
   },
 ];
 

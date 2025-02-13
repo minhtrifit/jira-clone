@@ -29,11 +29,11 @@ const chartData = [
 const chartConfig = {
   completed: {
     label: "Completed Tasks",
-    color: "hsl(var(--chart-2))",
+    color: "hsl(var(--chart-6))",
   },
   overdue: {
     label: "Overdue Tasks",
-    color: "hsl(var(--chart-5))",
+    color: "hsl(var(--chart-7))",
   },
 } satisfies ChartConfig;
 
