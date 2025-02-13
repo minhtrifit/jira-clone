@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: `${process.env.NEXT_PUBLIC_APP_NAME ?? "Jira clone"}`,
   description: "Developed by minhtrifit",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
