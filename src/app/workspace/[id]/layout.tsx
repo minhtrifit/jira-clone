@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
 import { AppSidebar } from "@/components/Slidebar/AppSlidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import NotificationBtn from "@/components/NotificationBtn/NotificationBtn";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import AppNavbar from "@/components/AppNavbar/AppNavbar";
 
 export const metadata: Metadata = {
